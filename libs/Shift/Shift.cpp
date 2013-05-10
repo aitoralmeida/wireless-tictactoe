@@ -6,9 +6,9 @@
 #include "Arduino.h"
 #include "Shift.h"
 
-int SER_Pin = 8;   //pin 14 on the 75HC595
-int RCLK_Pin = 9;  //pin 12 on the 75HC595
-int SRCLK_Pin = 10; //pin 11 on the 75HC595
+int SER_Pin = 38;   //pin 14 on the 75HC595
+int RCLK_Pin = 39;  //pin 12 on the 75HC595
+int SRCLK_Pin = 40; //pin 11 on the 75HC595
 
 //How many of the shift registers - change this
 #define number_of_74hc595s 1 
@@ -18,7 +18,7 @@ int SRCLK_Pin = 10; //pin 11 on the 75HC595
 
 boolean registers[numOfRegisterPins];
 
-void initialize(){
+void Shift::initialize(){
   pinMode(SER_Pin, OUTPUT);
   pinMode(RCLK_Pin, OUTPUT);
   pinMode(SRCLK_Pin, OUTPUT);
@@ -31,7 +31,7 @@ void initialize(){
 
 
 //set all register pins to LOW
-void clearRegisters(){
+void Shift::clearRegisters(){
   for(int i = numOfRegisterPins - 1; i >=  0; i--){
      registers[i] = LOW;
   }
@@ -40,7 +40,7 @@ void clearRegisters(){
 
 //Set and display registers
 //Only call AFTER all values are set how you would like (slow otherwise)
-void writeRegisters(){
+void Shift::writeRegisters(){
 
   digitalWrite(RCLK_Pin, LOW);
 
@@ -58,20 +58,6 @@ void writeRegisters(){
 }
 
 //set an individual pin HIGH or LOW
-void setRegisterPin(int index, int value){
+void Shift::setRegisterPin(int index, int value){
   registers[index] = value;
-}
-
-
-void loop(){
-
-  setRegisterPin(2, HIGH);
-  setRegisterPin(3, HIGH);
-  setRegisterPin(4, LOW);
-  setRegisterPin(5, HIGH);
-  setRegisterPin(7, HIGH);
-
-
-  writeRegisters();  //MUST BE CALLED TO DISPLAY CHANGES
-  //Only call once after the values are set how you need.
 }
