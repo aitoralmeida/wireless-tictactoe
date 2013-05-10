@@ -1,18 +1,23 @@
+#include <Shift.h>
 
-int ledRed1 = 50;
-int ledGreen1 = 52;
+Shift shift;
 
-int ledRed2 = 22;
-int ledGreen2 = 24;
+int red1 = 4;
+int green1 = 3;
+int red2 = 2;
+int green2 = 1;
 
-void setup() {                
+float volRedLow= 0.0;
+float volRedHigh = 1.0;
+
+float volGreenLow= 1.0;
+float volGreenHigh = 1.8;
+
+
+void setup() {  
   Serial.begin(9600);
   
-  pinMode(ledRed1, OUTPUT);     
-  pinMode(ledGreen1, OUTPUT); 
-  
-  pinMode(ledRed2, OUTPUT);     
-  pinMode(ledGreen2, OUTPUT);  
+  shift.initialize();
 }
 
 // the loop routine runs over and over again forever:
@@ -32,12 +37,12 @@ void loop() {
 }
 
 void adjust1(float v){
-  if (v < 1){
+  if (v < volRedHigh && v > volRedLow){
     showRed1();
-  }else if (v > 1.01 && v < 2.0) {
+  }else if (v > volGreenLow && v < volGreenHigh) {
     showGreen1();
   } else {
-    turnOff1();
+    turnOff();
   }
 }
 
@@ -47,37 +52,36 @@ void adjust2(float v){
   }else if (v > 1.01 && v < 2.0) {
     showGreen2();
   } else {
-    turnOff2();
+    turnOff();
   }
 }
 
 void showRed1(){
-  digitalWrite(ledGreen1, LOW);
-  digitalWrite(ledRed1, HIGH);   
+  shift.setRegisterPin(green1, LOW);   
+  shift.setRegisterPin(red1, HIGH);  
+  shift.writeRegisters();
 }
 
 void showGreen1(){
-  digitalWrite(ledRed1, LOW);
-  digitalWrite(ledGreen1, HIGH);   
+  shift.setRegisterPin(green1, HIGH);   
+  shift.setRegisterPin(red1, LOW);   
+  shift.writeRegisters();
 }
-
-void turnOff1(){
-  digitalWrite(ledRed1, LOW);
-  digitalWrite(ledGreen1, LOW);   
-}
-
 
 void showRed2(){
-  digitalWrite(ledGreen2, LOW);
-  digitalWrite(ledRed2, HIGH);   
+  shift.setRegisterPin(green2, LOW);   
+  shift.setRegisterPin(red2, HIGH);  
+  shift.writeRegisters();
 }
 
 void showGreen2(){
-  digitalWrite(ledRed2, LOW);
-  digitalWrite(ledGreen2, HIGH);   
+  shift.setRegisterPin(green2, HIGH);   
+  shift.setRegisterPin(red2, LOW);   
+  shift.writeRegisters();
 }
 
-void turnOff2(){
-  digitalWrite(ledRed2, LOW);
-  digitalWrite(ledGreen2, LOW);   
+void turnOff(){
+  shift.clearRegisters();
+  shift.writeRegisters();  
 }
+
