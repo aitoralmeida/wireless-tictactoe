@@ -6,7 +6,7 @@
 <setting alwaysvectorfont="no"/>
 <setting verticaltext="up"/>
 </settings>
-<grid distance="0.1" unitdist="inch" unit="mm" style="lines" multiple="1" display="no" altdistance="0.01" altunitdist="inch" altunit="inch"/>
+<grid distance="0.1" unitdist="inch" unit="inch" style="lines" multiple="1" display="no" altdistance="0.01" altunitdist="inch" altunit="inch"/>
 <layers>
 <layer number="1" name="Top" color="4" fill="1" visible="no" active="no"/>
 <layer number="16" name="Bottom" color="1" fill="1" visible="no" active="no"/>
@@ -3320,11 +3320,11 @@ type RDH, grid 15 mm</description>
 <library name="Connectors">
 <packages>
 <package name="CON_5P_1.27">
-<pad name="1" x="-2.54" y="0" drill="0.6" shape="long" rot="R270"/>
-<pad name="2" x="-1.27" y="0" drill="0.6" shape="long" rot="R270"/>
-<pad name="3" x="0" y="0" drill="0.6" shape="long" rot="R270"/>
-<pad name="4" x="1.27" y="0" drill="0.6" shape="long" rot="R270"/>
-<pad name="5" x="2.54" y="0" drill="0.6" shape="long" rot="R270"/>
+<pad name="1" x="-2.54" y="0" drill="0.6" diameter="1.016" shape="long" rot="R270"/>
+<pad name="2" x="-1.27" y="0" drill="0.6" diameter="1.016" shape="long" rot="R270"/>
+<pad name="3" x="0" y="0" drill="0.6" diameter="1.016" shape="long" rot="R270"/>
+<pad name="4" x="1.27" y="0" drill="0.6" diameter="1.016" shape="long" rot="R270"/>
+<pad name="5" x="2.54" y="0" drill="0.6" diameter="1.016" shape="long" rot="R270"/>
 <wire x1="3.81" y1="1.27" x2="3.81" y2="-1.27" width="0.127" layer="21"/>
 <wire x1="3.81" y1="-1.27" x2="-3.81" y2="-1.27" width="0.127" layer="21"/>
 <wire x1="-3.81" y1="-1.27" x2="-3.81" y2="1.27" width="0.127" layer="21"/>
