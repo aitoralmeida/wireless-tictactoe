@@ -7026,7 +7026,7 @@ Standard schematic elements and footprints for 5mm, 3mm, 1206, and 0603 sized LE
 <part name="P+5" library="supply1" deviceset="VCC" device="" value="+5V"/>
 <part name="GND7" library="supply1" deviceset="GND" device=""/>
 <part name="LED1" library="SparkFun-LED" deviceset="LED" device="3MM"/>
-<part name="U$1" library="SparkFun-LED" deviceset="LED_PIRANHA_5MM" device=""/>
+<part name="DEBUG_LED" library="SparkFun-LED" deviceset="LED_PIRANHA_5MM" device=""/>
 <part name="R4" library="resistor" deviceset="R-EU_" device="0204/7" value="330"/>
 <part name="R5" library="resistor" deviceset="R-EU_" device="0204/7" value="330"/>
 <part name="P+6" library="supply1" deviceset="VCC" device="" value="+5V"/>
@@ -7115,7 +7115,7 @@ Standard schematic elements and footprints for 5mm, 3mm, 1206, and 0603 sized LE
 <instance part="P+5" gate="VCC" x="193.04" y="48.26"/>
 <instance part="GND7" gate="1" x="200.66" y="22.86"/>
 <instance part="LED1" gate="G$1" x="-15.24" y="20.32"/>
-<instance part="U$1" gate="G$1" x="-25.4" y="-20.32"/>
+<instance part="DEBUG_LED" gate="G$1" x="-25.4" y="-20.32"/>
 <instance part="R4" gate="G$1" x="-15.24" y="7.62" rot="R270"/>
 <instance part="R5" gate="G$1" x="-2.54" y="-20.32"/>
 <instance part="P+6" gate="VCC" x="-15.24" y="27.94"/>
@@ -7653,14 +7653,14 @@ Standard schematic elements and footprints for 5mm, 3mm, 1206, and 0603 sized LE
 </net>
 <net name="N$9" class="0">
 <segment>
-<pinref part="U$1" gate="G$1" pin="C"/>
+<pinref part="DEBUG_LED" gate="G$1" pin="C"/>
 <pinref part="R5" gate="G$1" pin="1"/>
 <wire x1="-12.7" y1="-20.32" x2="-7.62" y2="-20.32" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="DBG_R" class="0">
 <segment>
-<pinref part="U$1" gate="G$1" pin="RED"/>
+<pinref part="DEBUG_LED" gate="G$1" pin="RED"/>
 <wire x1="-35.56" y1="-17.78" x2="-43.18" y2="-17.78" width="0.1524" layer="91"/>
 <label x="-45.72" y="-17.78" size="1.778" layer="95"/>
 </segment>
@@ -7672,7 +7672,7 @@ Standard schematic elements and footprints for 5mm, 3mm, 1206, and 0603 sized LE
 </net>
 <net name="DBG_B" class="0">
 <segment>
-<pinref part="U$1" gate="G$1" pin="BLU"/>
+<pinref part="DEBUG_LED" gate="G$1" pin="BLU"/>
 <wire x1="-35.56" y1="-20.32" x2="-43.18" y2="-20.32" width="0.1524" layer="91"/>
 <label x="-45.72" y="-20.32" size="1.778" layer="95"/>
 </segment>
@@ -7684,7 +7684,7 @@ Standard schematic elements and footprints for 5mm, 3mm, 1206, and 0603 sized LE
 </net>
 <net name="DBG_G" class="0">
 <segment>
-<pinref part="U$1" gate="G$1" pin="GRN"/>
+<pinref part="DEBUG_LED" gate="G$1" pin="GRN"/>
 <wire x1="-35.56" y1="-22.86" x2="-43.18" y2="-22.86" width="0.1524" layer="91"/>
 <label x="-45.72" y="-22.86" size="1.778" layer="95"/>
 </segment>
