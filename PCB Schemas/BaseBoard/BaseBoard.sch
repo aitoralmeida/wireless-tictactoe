@@ -7009,15 +7009,15 @@ Standard schematic elements and footprints for 5mm, 3mm, 1206, and 0603 sized LE
 <part name="JP2" library="SparkFun-Connectors" deviceset="M02" device="PTH"/>
 <part name="P+3" library="supply1" deviceset="VCC" device="" value="+5V"/>
 <part name="GND5" library="supply1" deviceset="GND" device=""/>
-<part name="X1" library="con-molex" deviceset="53?-05" device="261" value="SQUARE1"/>
-<part name="X2" library="con-molex" deviceset="53?-05" device="261" value="SQUARE2"/>
-<part name="X3" library="con-molex" deviceset="53?-05" device="261" value="SQUARE3"/>
-<part name="X4" library="con-molex" deviceset="53?-05" device="261" value="SQUARE4"/>
-<part name="X5" library="con-molex" deviceset="53?-05" device="261" value="SQUARE5"/>
-<part name="X6" library="con-molex" deviceset="53?-05" device="261" value="SQUARE6"/>
-<part name="X7" library="con-molex" deviceset="53?-05" device="261" value="SQUARE7"/>
-<part name="X8" library="con-molex" deviceset="53?-05" device="261" value="SQUARE8"/>
-<part name="X9" library="con-molex" deviceset="53?-05" device="261" value="SQUARE9"/>
+<part name="X1" library="con-molex" deviceset="53?-05" device="261" value="SQU1"/>
+<part name="X2" library="con-molex" deviceset="53?-05" device="261" value="SQU2"/>
+<part name="X3" library="con-molex" deviceset="53?-05" device="261" value="SQU3"/>
+<part name="X4" library="con-molex" deviceset="53?-05" device="261" value="SQU4"/>
+<part name="X5" library="con-molex" deviceset="53?-05" device="261" value="SQU5"/>
+<part name="X6" library="con-molex" deviceset="53?-05" device="261" value="SQU6"/>
+<part name="X7" library="con-molex" deviceset="53?-05" device="261" value="SQU7"/>
+<part name="X8" library="con-molex" deviceset="53?-05" device="261" value="SQU8"/>
+<part name="X9" library="con-molex" deviceset="53?-05" device="261" value="SQU9"/>
 <part name="P+4" library="supply1" deviceset="VCC" device="" value="+5V"/>
 <part name="GND6" library="supply1" deviceset="GND" device=""/>
 <part name="IC1" library="74xx-eu" deviceset="74*595" device="N" technology="HC"/>

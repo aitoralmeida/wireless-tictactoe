@@ -1927,55 +1927,55 @@ design rules under a new name.</description>
 <element name="C4" library="capacitor-wima" package="C5B3" value="100nF" x="73.66" y="46.99" rot="R180"/>
 <element name="C5" library="capacitor-wima" package="C5B3" value="100nF" x="73.66" y="40.64" rot="R180"/>
 <element name="JP2" library="SparkFun-Connectors" package="1X02" value="M02PTH" x="1.27" y="33.02" rot="R270"/>
-<element name="X1" library="con-molex" package="53261-05" value="SQUARE1" x="45.72" y="72.39">
+<element name="X1" library="con-molex" package="53261-05" value="SQU1" x="45.72" y="72.39">
 <attribute name="OC_NEWARK" value="unknown" x="77.47" y="38.1" size="1.778" layer="27" display="off"/>
 <attribute name="MPN" value="" x="77.47" y="38.1" size="1.778" layer="27" display="off"/>
 <attribute name="MF" value="" x="77.47" y="38.1" size="1.778" layer="27" display="off"/>
 <attribute name="OC_FARNELL" value="1433644" x="77.47" y="38.1" size="1.778" layer="27" display="off"/>
 </element>
-<element name="X2" library="con-molex" package="53261-05" value="SQUARE2" x="30.48" y="72.39">
+<element name="X2" library="con-molex" package="53261-05" value="SQU2" x="30.48" y="72.39">
 <attribute name="OC_NEWARK" value="unknown" x="76.2" y="38.1" size="1.778" layer="27" display="off"/>
 <attribute name="MPN" value="" x="76.2" y="38.1" size="1.778" layer="27" display="off"/>
 <attribute name="MF" value="" x="76.2" y="38.1" size="1.778" layer="27" display="off"/>
 <attribute name="OC_FARNELL" value="1433644" x="76.2" y="38.1" size="1.778" layer="27" display="off"/>
 </element>
-<element name="X3" library="con-molex" package="53261-05" value="SQUARE3" x="16.51" y="72.39">
+<element name="X3" library="con-molex" package="53261-05" value="SQU3" x="16.51" y="72.39">
 <attribute name="OC_NEWARK" value="unknown" x="76.2" y="38.1" size="1.778" layer="27" display="off"/>
 <attribute name="MPN" value="" x="76.2" y="38.1" size="1.778" layer="27" display="off"/>
 <attribute name="MF" value="" x="76.2" y="38.1" size="1.778" layer="27" display="off"/>
 <attribute name="OC_FARNELL" value="1433644" x="76.2" y="38.1" size="1.778" layer="27" display="off"/>
 </element>
-<element name="X4" library="con-molex" package="53261-05" value="SQUARE4" x="87.63" y="72.39">
+<element name="X4" library="con-molex" package="53261-05" value="SQU4" x="87.63" y="72.39">
 <attribute name="OC_NEWARK" value="unknown" x="107.95" y="27.94" size="1.778" layer="27" display="off"/>
 <attribute name="MPN" value="" x="107.95" y="27.94" size="1.778" layer="27" display="off"/>
 <attribute name="MF" value="" x="107.95" y="27.94" size="1.778" layer="27" display="off"/>
 <attribute name="OC_FARNELL" value="1433644" x="107.95" y="27.94" size="1.778" layer="27" display="off"/>
 </element>
-<element name="X5" library="con-molex" package="53261-05" value="SQUARE5" x="73.66" y="72.39">
+<element name="X5" library="con-molex" package="53261-05" value="SQU5" x="73.66" y="72.39">
 <attribute name="OC_NEWARK" value="unknown" x="107.95" y="27.94" size="1.778" layer="27" display="off"/>
 <attribute name="MPN" value="" x="107.95" y="27.94" size="1.778" layer="27" display="off"/>
 <attribute name="MF" value="" x="107.95" y="27.94" size="1.778" layer="27" display="off"/>
 <attribute name="OC_FARNELL" value="1433644" x="107.95" y="27.94" size="1.778" layer="27" display="off"/>
 </element>
-<element name="X6" library="con-molex" package="53261-05" value="SQUARE6" x="59.69" y="72.39">
+<element name="X6" library="con-molex" package="53261-05" value="SQU6" x="59.69" y="72.39">
 <attribute name="OC_NEWARK" value="unknown" x="107.95" y="27.94" size="1.778" layer="27" display="off"/>
 <attribute name="MPN" value="" x="107.95" y="27.94" size="1.778" layer="27" display="off"/>
 <attribute name="MF" value="" x="107.95" y="27.94" size="1.778" layer="27" display="off"/>
 <attribute name="OC_FARNELL" value="1433644" x="107.95" y="27.94" size="1.778" layer="27" display="off"/>
 </element>
-<element name="X7" library="con-molex" package="53261-05" value="SQUARE7" x="21.59" y="8.89" rot="R180">
+<element name="X7" library="con-molex" package="53261-05" value="SQU7" x="21.59" y="8.89" rot="R180">
 <attribute name="OC_NEWARK" value="unknown" x="-40.64" y="53.34" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="MPN" value="" x="-40.64" y="53.34" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="MF" value="" x="-40.64" y="53.34" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="OC_FARNELL" value="1433644" x="-40.64" y="53.34" size="1.778" layer="27" rot="R180" display="off"/>
 </element>
-<element name="X8" library="con-molex" package="53261-05" value="SQUARE8" x="35.56" y="8.89" rot="R180">
+<element name="X8" library="con-molex" package="53261-05" value="SQU8" x="35.56" y="8.89" rot="R180">
 <attribute name="OC_NEWARK" value="unknown" x="15.24" y="62.23" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="MPN" value="" x="15.24" y="62.23" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="MF" value="" x="15.24" y="62.23" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="OC_FARNELL" value="1433644" x="15.24" y="62.23" size="1.778" layer="27" rot="R180" display="off"/>
 </element>
-<element name="X9" library="con-molex" package="53261-05" value="SQUARE9" x="49.53" y="8.89" rot="R180">
+<element name="X9" library="con-molex" package="53261-05" value="SQU9" x="49.53" y="8.89" rot="R180">
 <attribute name="OC_NEWARK" value="unknown" x="15.24" y="62.23" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="MPN" value="" x="15.24" y="62.23" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="MF" value="" x="15.24" y="62.23" size="1.778" layer="27" rot="R180" display="off"/>
@@ -1985,9 +1985,9 @@ design rules under a new name.</description>
 <element name="IC2" library="74xx-eu" package="DIL16" value="74HC595N" x="71.12" y="58.42" rot="R180"/>
 <element name="IC3" library="74xx-eu" package="DIL16" value="74HC595N" x="40.64" y="22.86"/>
 <element name="LED1" library="SparkFun-LED" package="LED3MM" value="" x="77.47" y="13.97"/>
-<element name="DEBUG_LED" library="SparkFun-LED" package="LED_PIRANHA_5MM" value="LED_PIRANHA_5MM" x="92.71" y="39.37" rot="R180"/>
-<element name="R4" library="resistor" package="0204/7" value="330" x="86.36" y="13.97"/>
-<element name="R5" library="resistor" package="0204/7" value="330" x="97.79" y="12.7" rot="R270"/>
+<element name="DEBUG_LED" library="SparkFun-LED" package="LED_PIRANHA_5MM" value="LED_PIRANHA_5MM" x="88.9" y="36.83" rot="R180"/>
+<element name="R4" library="resistor" package="0204/7" value="330" x="83.82" y="48.26"/>
+<element name="R5" library="resistor" package="0204/7" value="330" x="93.98" y="48.26" rot="R180"/>
 </elements>
 <signals>
 <signal name="GND">
@@ -2020,9 +2020,9 @@ design rules under a new name.</description>
 <wire x1="76.2" y1="40.64" x2="76.2" y2="46.99" width="0" layer="19" extent="1-1"/>
 <wire x1="85.09" y1="19.05" x2="76.2" y2="40.64" width="0" layer="19" extent="1-1"/>
 <wire x1="90.17" y1="19.05" x2="85.09" y2="19.05" width="0" layer="19" extent="1-1"/>
-<wire x1="90.17" y1="13.97" x2="90.17" y2="19.05" width="0" layer="19" extent="1-1"/>
-<wire x1="97.79" y1="8.89" x2="90.17" y2="13.97" width="0" layer="19" extent="1-1"/>
-<wire x1="86.36" y1="1.27" x2="97.79" y2="8.89" width="0" layer="19" extent="1-1"/>
+<wire x1="87.63" y1="48.26" x2="90.17" y2="19.05" width="0" layer="19" extent="1-1"/>
+<wire x1="90.17" y1="48.26" x2="87.63" y2="48.26" width="0" layer="19" extent="1-1"/>
+<wire x1="86.36" y1="1.27" x2="90.17" y2="48.26" width="0" layer="19" extent="1-1"/>
 <wire x1="1.27" y1="33.02" x2="86.36" y2="1.27" width="0" layer="19" extent="1-1"/>
 <wire x1="34.31" y1="11.39" x2="76.2" y2="46.99" width="0" layer="19" extent="1-1"/>
 <wire x1="88.88" y1="69.89" x2="34.31" y2="11.39" width="0" layer="19" extent="1-1"/>
@@ -2230,27 +2230,27 @@ design rules under a new name.</description>
 <signal name="N$8">
 <contactref element="LED1" pad="K"/>
 <contactref element="R4" pad="1"/>
-<wire x1="78.74" y1="13.97" x2="82.55" y2="13.97" width="0" layer="19" extent="1-1"/>
+<wire x1="78.74" y1="13.97" x2="80.01" y2="48.26" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="N$9">
 <contactref element="DEBUG_LED" pad="-"/>
 <contactref element="R5" pad="1"/>
-<wire x1="95.394" y1="42.054" x2="97.79" y2="16.51" width="0" layer="19" extent="1-1"/>
+<wire x1="91.584" y1="39.514" x2="97.79" y2="48.26" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="DBG_R">
 <contactref element="DEBUG_LED" pad="R"/>
 <contactref element="U1" pad="53"/>
-<wire x1="90.131" y1="42.066" x2="43.26" y2="33.91" width="0" layer="19" extent="1-1"/>
+<wire x1="86.321" y1="39.526" x2="43.26" y2="33.91" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="DBG_B">
 <contactref element="DEBUG_LED" pad="B"/>
 <contactref element="U1" pad="54"/>
-<wire x1="95.398" y1="36.796" x2="43.76" y2="33.91" width="0" layer="19" extent="1-1"/>
+<wire x1="91.588" y1="34.256" x2="43.76" y2="33.91" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="DBG_G">
 <contactref element="DEBUG_LED" pad="G"/>
 <contactref element="U1" pad="55"/>
-<wire x1="44.26" y1="33.91" x2="90.135" y2="36.808" width="0" layer="19" extent="1-1"/>
+<wire x1="44.26" y1="33.91" x2="86.325" y2="34.268" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="GRE4">
 <contactref element="X4" pad="4"/>
