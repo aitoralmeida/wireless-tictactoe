@@ -1,117 +1,89 @@
-#include <Shift.h>
+#include <Shiftduino.h>
 
-Shift shift;
+int numShifts = 3;
+Shiftduino sd(30, 31 , 32, numShifts);
 
-//LEDs
-int red1 = 4;
-int green1 = 3;
-int red2 = 2;
-int green2 = 1;
-int red3 = 10;
-int green3 = 9;
+//cny70 pins
+int colorPins[9] = {0,1,2,3,4,5,6,7,8};
 
-//Voltages for each color
-float volRedLow= 0.0;
-float volRedHigh = 1.0;
-float volGreenLow= 1.0;
-float volGreenHigh = 1.8;
+//read color values
+int color[9];
+
+//Color limits
+int redLow = 0;
+int redHigh = 0;
+int greenLow = 0;
+int greenHigh = 0;
+
+//Reds, 0 or 1
+int reds[9] = {0,0,0,0,0,0,0,0,};
+
+//Greens, 0 or 1
+int greens[9] = {0,0,0,0,0,0,0,0,};
+
+int winConditions[][9] ={{1,1,1,0,0,0,0,0,0},{0,0,0,1,1,1,0,0,0},
+                        {0,0,0,0,0,0,1,1,1},{1,0,0,1,0,0,1,0,0},
+                        {0,1,0,0,1,0,0,1,0},{0,0,1,0,0,1,0,0,1},
+                        {1,0,0,0,1,0,0,0,1},{0,0,1,0,1,0,1,0,0}};
+
+//Led pins
+int redPins[9] = {0,2,4,6,8,10,12,14,16};
+int greenPins[9] = {1,3,5,7,9,11,13,15,17};
+
 
 
 void setup() {  
   Serial.begin(9600);
-  
-  shift.initialize();
+  sd.clear();
 }
 
 // the loop routine runs over and over again forever:
 void loop() {
-  
-  int sensorValue1 = analogRead(A0);
-  // Convert the analog reading (which goes from 0 - 1023) to a voltage (0 - 5V):
-  float voltage1 = sensorValue1 * (5.0 / 1023.0);
-  adjust1(voltage1);
-  
-  int sensorValue2 = analogRead(A4);
-  // Convert the analog reading (which goes from 0 - 1023) to a voltage (0 - 5V):
-  float voltage2 = sensorValue2 * (5.0 / 1023.0);
-  adjust2(voltage2);
-  Serial.println(voltage2);
-  
-  int sensorValue3 = analogRead(A7);
-  // Convert the analog reading (which goes from 0 - 1023) to a voltage (0 - 5V):
-  float voltage3 = sensorValue3 * (5.0 / 1023.0);
-  adjust3(voltage3);
-  
+  checkColors();
+  setLeds();
 }
 
-void adjust1(float v){
-  if (v < volRedHigh && v > volRedLow){
-    showRed1();
-  }else if (v > volGreenLow && v < volGreenHigh) {
-    showGreen1();
-  } else {
-    turnOff();
+void setLeds(){
+  for(int i = 0; i < 9; i++){
+    if (reds[i] == 1){
+      sd.setPin(redPins[i],1);
+      sd.setPin(greenPins[i],0);
+    } else if(greens[i]== 1){
+      sd.setPin(redPins[i],0);
+      sd.setPin(greenPins[i],1);
+    } else{
+      sd.setPin(redPins[i],0);
+      sd.setPin(greenPins[i],0);
+    }
   }
 }
 
-void adjust2(float v){
-  if (v < 1){
-    showRed2();
-  }else if (v > 1.01 && v < 2.0) {
-    showGreen2();
-  } else {
-    turnOff();
+void checkColors(){
+  for(int i = 0; i < 9; i++){
+    int value = analogRead(colorPins[i]);  
+    char color = analyzeColor(value);
+    if (color = 'r'){
+      reds[i] = 1;
+      greens[i] = 0;
+    } else if (color = 'g'){
+      reds[i] = 0;
+      greens[i] = 1;
+    } else{
+      reds[i] = 0;
+      greens[i] = 0;
+    }
+   
   }
 }
 
-void adjust3(float v){
-  if (v < 1){
-    showRed3();
-  }else if (v > 1.01 && v < 2.0) {
-    showGreen3();
-  } else {
-    turnOff();
+char analyzeColor(int value){
+  char color = 'x';
+  if (color > redLow && color< redHigh){
+    color = 'r';
+  } else if (color > greenLow && color< greenHigh){
+    color = 'g';
   }
+  return color;
 }
 
-void showRed1(){
-  shift.setRegisterPin(green1, LOW);   
-  shift.setRegisterPin(red1, HIGH);  
-  shift.writeRegisters();
-}
-
-void showGreen1(){
-  shift.setRegisterPin(green1, HIGH);   
-  shift.setRegisterPin(red1, LOW);   
-  shift.writeRegisters();
-}
-
-void showRed2(){
-  shift.setRegisterPin(green2, LOW);   
-  shift.setRegisterPin(red2, HIGH);  
-  shift.writeRegisters();
-}
-
-void showGreen2(){
-  shift.setRegisterPin(green2, HIGH);   
-  shift.setRegisterPin(red2, LOW);   
-  shift.writeRegisters();
-}
-
-void showRed3(){
-  shift.setRegisterPin(green3, LOW);   
-  shift.setRegisterPin(red3, HIGH);  
-  shift.writeRegisters();
-}
-
-void showGreen3(){
-  shift.setRegisterPin(green3, HIGH);   
-  shift.setRegisterPin(red3, LOW);   
-  shift.writeRegisters();
-}
-
-void turnOff(){
-  shift.clearRegisters();
-  shift.writeRegisters();  
-}
 
