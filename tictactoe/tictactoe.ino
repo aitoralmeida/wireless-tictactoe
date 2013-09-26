@@ -39,8 +39,29 @@ void setup() {
 
 // the loop routine runs over and over again forever:
 void loop() {
-  checkColors();
-  setLeds();
+  int gameStatus = 0; //0 = ongoing game, 1 = you win, 2 = opponent wins
+  if (gameStatus == 0){ 
+    checkColors();
+    setLeds();
+    gameStatus = checkVictoryConditions(); 
+  } else if (gameStatus == 1){
+    blinkLeds(0,1);
+  } else if (gameStatus == 2){
+    blinkLeds(1,0);
+  }
+}
+
+void blinkLeds(int redValue, int greenValue){
+  sd.clear();
+  while(true){ //TODO change this
+    for (int i = 0; i < 9; i++){
+      sd.setPin(redPins[i],redValue);
+      sd.setPin(greenPins[i],greenValue);
+      delay(50);
+      sd.setPin(redPins[i],0);
+      sd.setPin(greenPins[i],0);  
+    }
+  }
 }
 
 void setLeds(){
@@ -84,6 +105,11 @@ char analyzeColor(int value){
     color = 'g';
   }
   return color;
+}
+
+//0 = ongoing game, 1 = you win, 2 = opponent wins
+int checkVictoryConditions(){
+
 }
 
 
