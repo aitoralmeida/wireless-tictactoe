@@ -30,6 +30,11 @@ int winConditions[][9] ={{1,1,1,0,0,0,0,0,0},{0,0,0,1,1,1,0,0,0},
 int redPins[9] = {0,2,4,6,8,10,12,14,16};
 int greenPins[9] = {1,3,5,7,9,11,13,15,17};
 
+//Game control variables
+int gameStatus = 0; //0 = ongoing game, 1 = you win, 2 = opponent wins
+int currentTurn = 0; //0 you, 1 opponent
+
+
 
 
 void setup() {  
@@ -39,19 +44,19 @@ void setup() {
 
 // the loop routine runs over and over again forever:
 void loop() {
-  int gameStatus = 0; //0 = ongoing game, 1 = you win, 2 = opponent wins
   if (gameStatus == 0){ 
     checkColors();
     setLeds();
     gameStatus = checkVictoryConditions(); 
   } else if (gameStatus == 1){
-    blinkLeds(0,1);
+    victoryLoop(0,1);
   } else if (gameStatus == 2){
-    blinkLeds(1,0);
+    victoryLoop(1,0);
   }
 }
 
-void blinkLeds(int redValue, int greenValue){
+//Blink leds when endgame is reached
+void victoryLoop(int redValue, int greenValue){
   sd.clear();
   while(true){ //TODO change this
     for (int i = 0; i < 9; i++){
@@ -64,6 +69,7 @@ void blinkLeds(int redValue, int greenValue){
   }
 }
 
+//Set led values to used chip
 void setLeds(){
   for(int i = 0; i < 9; i++){
     if (reds[i] == 1){
@@ -79,6 +85,7 @@ void setLeds(){
   }
 }
 
+//Checks the color of the used chip
 void checkColors(){
   for(int i = 0; i < 9; i++){
     int value = analogRead(colorPins[i]);  
@@ -97,6 +104,7 @@ void checkColors(){
   }
 }
 
+//identifies a color from the cny70 value
 char analyzeColor(int value){
   char color = 'x';
   if (color > redLow && color< redHigh){
