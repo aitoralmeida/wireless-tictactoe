@@ -59,8 +59,8 @@
 <wire x1="0" y1="0" x2="38.405" y2="0" width="0" layer="20"/>
 <wire x1="38.405" y1="0" x2="38.405" y2="38.09" width="0" layer="20"/>
 <wire x1="38.405" y1="38.09" x2="0" y2="38.09" width="0" layer="20"/>
-<text x="35.56" y="15.875" size="1.27" layer="25" rot="R90">Made by Iditxa</text>
-<text x="33.655" y="15.875" size="1.27" layer="25" rot="R90">Thofu - Square v1.0</text>
+<text x="31.75" y="15.875" size="1.27" layer="25" rot="R90">Made by Iditxa</text>
+<text x="29.845" y="15.875" size="1.27" layer="25" rot="R90">Thofu - Square v1.0</text>
 <hole x="3.175" y="34.925" drill="3.2"/>
 <hole x="3.175" y="3.175" drill="3.2"/>
 <hole x="34.925" y="3.175" drill="3.2"/>
