@@ -10,10 +10,10 @@ int colorPins[9] = {0,1,2,3,4,5,6,7,8};
 int color[9];
 
 //Color limits
-int redLow = 0;
-int redHigh = 0;
-int greenLow = 0;
-int greenHigh = 0;
+int redLow = 45;
+int redHigh = 55;
+int greenLow = 100;
+int greenHigh = 115;
 
 //Reds, 0 or 1
 int reds[9] = {0,0,0,0,0,0,0,0,};
