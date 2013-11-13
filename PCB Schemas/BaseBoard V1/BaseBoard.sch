@@ -9337,26 +9337,26 @@ Source: www.kingbright.com</description>
 </net>
 <net name="RX" class="0">
 <segment>
-<pinref part="PROG" gate="G$1" pin="4"/>
-<wire x1="-30.48" y1="121.92" x2="-22.86" y2="121.92" width="0.1524" layer="91"/>
-<label x="-25.4" y="121.92" size="1.778" layer="95"/>
-</segment>
-<segment>
 <label x="132.08" y="-2.54" size="1.778" layer="95"/>
 <pinref part="U1" gate="1" pin="(RXD0/PCIN8)PE0"/>
 <wire x1="106.68" y1="-2.54" x2="132.08" y2="-2.54" width="0.1524" layer="91"/>
 </segment>
-</net>
-<net name="TX" class="0">
 <segment>
 <pinref part="PROG" gate="G$1" pin="3"/>
 <wire x1="-30.48" y1="119.38" x2="-22.86" y2="119.38" width="0.1524" layer="91"/>
 <label x="-25.4" y="119.38" size="1.778" layer="95"/>
 </segment>
+</net>
+<net name="TX" class="0">
 <segment>
 <label x="132.08" y="0" size="1.778" layer="95"/>
 <pinref part="U1" gate="1" pin="(TXD0)PE1"/>
 <wire x1="132.08" y1="0" x2="106.68" y2="0" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="PROG" gate="G$1" pin="4"/>
+<wire x1="-30.48" y1="121.92" x2="-22.86" y2="121.92" width="0.1524" layer="91"/>
+<label x="-25.4" y="121.92" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="N$5" class="0">
