@@ -3758,7 +3758,7 @@ Standard 5-pin 0.1" header. Use with straight break away headers (SKU : PRT-0011
 <instance part="GND7" gate="1" x="-45.72" y="-5.08"/>
 <instance part="GND8" gate="1" x="-45.72" y="-30.48"/>
 <instance part="GND1" gate="1" x="45.72" y="12.7"/>
-<instance part="P+2" gate="VCC" x="25.4" y="-5.08"/>
+<instance part="P+2" gate="VCC" x="27.94" y="-5.08"/>
 <instance part="GND2" gate="1" x="27.94" y="-25.4"/>
 <instance part="CNY70" gate="G$1" x="35.56" y="20.32"/>
 <instance part="R3" gate="G$1" x="-25.4" y="33.02"/>
@@ -3833,8 +3833,8 @@ Standard 5-pin 0.1" header. Use with straight break away headers (SKU : PRT-0011
 <segment>
 <pinref part="P+2" gate="VCC" pin="VCC"/>
 <pinref part="JP1" gate="G$1" pin="1"/>
-<wire x1="30.48" y1="-10.16" x2="25.4" y2="-10.16" width="0.1524" layer="91"/>
-<wire x1="25.4" y1="-10.16" x2="25.4" y2="-7.62" width="0.1524" layer="91"/>
+<wire x1="30.48" y1="-10.16" x2="27.94" y2="-10.16" width="0.1524" layer="91"/>
+<wire x1="27.94" y1="-10.16" x2="27.94" y2="-7.62" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="COLOR" class="0">
@@ -3848,8 +3848,8 @@ Standard 5-pin 0.1" header. Use with straight break away headers (SKU : PRT-0011
 <junction x="45.72" y="22.86"/>
 </segment>
 <segment>
-<wire x1="30.48" y1="-15.24" x2="20.32" y2="-15.24" width="0.1524" layer="91"/>
-<label x="20.32" y="-15.24" size="1.778" layer="95" rot="R180"/>
+<wire x1="30.48" y1="-15.24" x2="22.86" y2="-15.24" width="0.1524" layer="91"/>
+<label x="25.4" y="-15.24" size="1.778" layer="95" rot="MR0"/>
 <pinref part="JP1" gate="G$1" pin="3"/>
 </segment>
 </net>
@@ -3876,46 +3876,46 @@ Standard 5-pin 0.1" header. Use with straight break away headers (SKU : PRT-0011
 </net>
 <net name="RED" class="0">
 <segment>
-<wire x1="30.48" y1="-17.78" x2="20.32" y2="-17.78" width="0.1524" layer="91"/>
-<label x="20.32" y="-17.78" size="1.778" layer="95" rot="R180"/>
+<wire x1="30.48" y1="-17.78" x2="22.86" y2="-17.78" width="0.1524" layer="91"/>
+<label x="25.4" y="-17.78" size="1.778" layer="95" rot="MR0"/>
 <pinref part="JP1" gate="G$1" pin="4"/>
 </segment>
 <segment>
 <label x="-15.24" y="33.02" size="1.778" layer="95"/>
 <pinref part="R3" gate="G$1" pin="2"/>
-<wire x1="-20.32" y1="33.02" x2="-15.24" y2="33.02" width="0.1524" layer="91"/>
+<wire x1="-20.32" y1="33.02" x2="-12.7" y2="33.02" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <label x="-15.24" y="7.62" size="1.778" layer="95"/>
 <pinref part="R5" gate="G$1" pin="2"/>
-<wire x1="-20.32" y1="7.62" x2="-15.24" y2="7.62" width="0.1524" layer="91"/>
+<wire x1="-20.32" y1="7.62" x2="-12.7" y2="7.62" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <label x="-15.24" y="-17.78" size="1.778" layer="95"/>
 <pinref part="R7" gate="G$1" pin="2"/>
-<wire x1="-20.32" y1="-17.78" x2="-15.24" y2="-17.78" width="0.1524" layer="91"/>
+<wire x1="-20.32" y1="-17.78" x2="-12.7" y2="-17.78" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="GREEN" class="0">
 <segment>
-<wire x1="30.48" y1="-20.32" x2="20.32" y2="-20.32" width="0.1524" layer="91"/>
-<label x="20.32" y="-20.32" size="1.778" layer="95" rot="R180"/>
+<wire x1="30.48" y1="-20.32" x2="22.86" y2="-20.32" width="0.1524" layer="91"/>
+<label x="25.4" y="-20.32" size="1.778" layer="95" rot="MR0"/>
 <pinref part="JP1" gate="G$1" pin="5"/>
 </segment>
 <segment>
 <label x="-15.24" y="-33.02" size="1.778" layer="95"/>
 <pinref part="R8" gate="G$1" pin="2"/>
-<wire x1="-20.32" y1="-33.02" x2="-15.24" y2="-33.02" width="0.1524" layer="91"/>
+<wire x1="-20.32" y1="-33.02" x2="-12.7" y2="-33.02" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <label x="-15.24" y="17.78" size="1.778" layer="95"/>
 <pinref part="R4" gate="G$1" pin="2"/>
-<wire x1="-20.32" y1="17.78" x2="-15.24" y2="17.78" width="0.1524" layer="91"/>
+<wire x1="-20.32" y1="17.78" x2="-12.7" y2="17.78" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <label x="-15.24" y="-7.62" size="1.778" layer="95"/>
 <pinref part="R6" gate="G$1" pin="2"/>
-<wire x1="-20.32" y1="-7.62" x2="-15.24" y2="-7.62" width="0.1524" layer="91"/>
+<wire x1="-20.32" y1="-7.62" x2="-12.7" y2="-7.62" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$6" class="0">
