@@ -1,6 +1,6 @@
 #include <Shiftduino.h>
 
-Shiftduino sd(30, 31 , 32, 2);
+Shiftduino sd(22, 24 , 23, 3);
 
 int colorPin1 = 0; 
 int colorPin2 = 1; 
@@ -14,30 +14,31 @@ void setup()
 
 void loop()
 {
-  int color0 = analogRead(0); 
-  Serial.println(color0);
-  int color1 = analogRead(1);
+  int color0 = analogRead(A8); 
   
-  if(color0 > 700 && color0 < 770) {
-    sd.setPin(1, 0); //R1
-    sd.setPin(0, 1); //G1
-  } else if(color0 > 590 && color0 < 650){
-    sd.setPin(1, 1); //R1
-    sd.setPin(0, 0); //G1
+  int color1 = analogRead(A6);
+  Serial.println(color1);
+  
+  if(color0 > 190 && color0 < 225) {
+    sd.setPin(0, 0); //R1
+    sd.setPin(1, 1); //G1
+  } else if(color0 > 135 && color0 < 145){
+    sd.setPin(0, 1); //R1
+    sd.setPin(1, 0); //G1
   } else{
     sd.setPin(1, 0); //R1
     sd.setPin(0, 0); //G1
   }
   
-  if(color1 > 700 && color1 < 770) {
-    sd.setPin(8, 1); //G2
-    sd.setPin(9, 0); //R2
-  } else if(color1 > 590 && color1 < 650){
-    sd.setPin(8, 0); //G2
-    sd.setPin(9, 1); //R2
+  if(color1 > 190 && color1 < 225) {
+    sd.setPin(2, 1); //G2
+    sd.setPin(3, 0); //R2
+  } else if(color1 > 80 && color1 < 120){
+    sd.setPin(2, 0); //G2
+    sd.setPin(3, 1); //R2
   } else{
-    sd.setPin(8, 0); //G2
-    sd.setPin(9, 0); //R2
+    sd.setPin(2, 0); //G2
+    sd.setPin(3, 0); //R2
   }
   
   /*
