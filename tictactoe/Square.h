@@ -13,12 +13,14 @@ class Square
 		void setRed();
 		void clear();
 		char checkColor();
+                int getIndex();
 		
 		
 
 	private:
 		int calculateIndex();
 		void writeValue(int index, int value);
+                int getGreenIndex(int pos);
 		
 
 };
