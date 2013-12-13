@@ -14,6 +14,7 @@ class Square
 		void setRed();
 		void clear();
 		char checkColor();
+                float getColorValue();
                 int getPosition();
                 int getGreenIndex();
                 int getRedIndex();

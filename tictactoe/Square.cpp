@@ -94,6 +94,11 @@ char Square::checkColor(){
 	return color;
 }
 
+float Square::getColorValue(){
+        colorValue = analogRead(_analogPin);
+        return colorValue;
+}
+
 int Square::getPosition(){
         return _position;
 }
