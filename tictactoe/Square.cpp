@@ -157,10 +157,10 @@ int Square::calculateGreenIndex(int pos){
     return 2;
   }
   else if (pos == 3){
-    return 3;
+    return 4;
   }
   else if (pos == 4){
-    return 4;
+    return 8;
   }
   else if (pos == 5){
     return 10;
