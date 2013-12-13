@@ -108,7 +108,7 @@
 <wire x1="0" y1="0" x2="36.8175" y2="0" width="0" layer="20"/>
 <wire x1="36.8175" y1="0" x2="36.8175" y2="36.82" width="0" layer="20"/>
 <wire x1="36.8175" y1="36.82" x2="0" y2="36.82" width="0" layer="20"/>
-<text x="12.3825" y="5.3975" size="1.27" layer="25">Square v2
+<text x="10.16" y="5.3975" size="1.27" layer="25">Tictactoe Square V2
 THOFU@2013</text>
 <hole x="2.54" y="34.29" drill="3.2"/>
 <hole x="2.54" y="2.54" drill="3.2"/>
