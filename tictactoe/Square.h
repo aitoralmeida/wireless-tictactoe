@@ -3,18 +3,20 @@
 #define Square_h
 
 #include "Arduino.h"
+#include <Shiftduino.h>
 
 class Square
 {
 	public:
-		Square(uint8_t analogPin, uint8_t position, uint8_t dataPin, uint8_t clockPin, uint8_t latchPin, uint8_t numOfRegisters);
-		void calibrateCNY70(int maxGreen, int minGreen, int maxRed, int minRed);
+		Square(uint8_t analogPin, uint8_t pos, Shiftduino * reg);
+                void calibrateCNY70(int maxGreen, int minGreen, int maxRed, int minRed);
 		void setGreen();
 		void setRed();
 		void clear();
 		char checkColor();
-                int getIndex();
                 int getPosition();
+                int getGreenIndex();
+                int getRedIndex();
 		
 		
 
@@ -30,10 +32,11 @@ class Square
                 int _minGreen;                
                 int _maxRed;
                 int _minRed;
+                Shiftduino * sd;
 
 		int calculateIndex();
 		void writeValue(int index, int value);
-                int getGreenIndex(int pos);
+                int calculateGreenIndex(int pos);
 		
 
 };

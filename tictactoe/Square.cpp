@@ -36,16 +36,15 @@ Shiftduino * sd;
 
 
 //************* PUBLIC ************************
-Square::Square(uint8_t analogPin, uint8_t pos, uint8_t dataPin, uint8_t clockPin, uint8_t latchPin, uint8_t numOfRegisters){
-
-	sd = new Shiftduino(dataPin, clockPin , latchPin, numOfRegisters);
+Square::Square(uint8_t analogPin, uint8_t pos, Shiftduino * reg){
+	sd = reg;
 	
 	_analogPin = analogPin;
 	_position = pos;
 	
 	//_index = calculateIndex();
 	
-	greenIndex = getGreenIndex(pos);
+	greenIndex = calculateGreenIndex(pos);
 	redIndex = greenIndex+1;
 	
 	//Reset the leds
@@ -95,12 +94,16 @@ char Square::checkColor(){
 	return color;
 }
 
-int Square::getIndex(){
-        return _index;
-}
-
 int Square::getPosition(){
         return _position;
+}
+
+int Square::getGreenIndex(){
+        return greenIndex;
+}
+
+int Square::getRedIndex(){
+        return redIndex;
 }
 
 
@@ -146,7 +149,7 @@ Square 8: 18 and 19
 Square 9: 20 and 21
 
 */
-int Square::getGreenIndex(int pos){
+int Square::calculateGreenIndex(int pos){
   if (pos == 1){
     return 0;
   }
