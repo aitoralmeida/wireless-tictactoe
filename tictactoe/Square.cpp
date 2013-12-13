@@ -15,7 +15,7 @@ int _position; // from 1 to 9
 //Squares 4 to 6 are in shiftreg 2
 //Squares 7 to 9 are in shiftreg 3
 //In each shiftreg there is one unused square position
-int _index; 
+//int _index; 
 
 //Each square has two leds, green and red
 //The index is the position of the red led and index-1 the position of the green led 
@@ -36,16 +36,16 @@ Shiftduino * sd;
 
 
 //************* PUBLIC ************************
-Square::Square(uint8_t analogPin, uint8_t position, uint8_t dataPin, uint8_t clockPin, uint8_t latchPin, uint8_t numOfRegisters){
+Square::Square(uint8_t analogPin, uint8_t pos, uint8_t dataPin, uint8_t clockPin, uint8_t latchPin, uint8_t numOfRegisters){
 
 	sd = new Shiftduino(dataPin, clockPin , latchPin, numOfRegisters);
 	
 	_analogPin = analogPin;
-	_position = position;
+	_position = pos;
 	
-	_index = calculateIndex();
+	//_index = calculateIndex();
 	
-	greenIndex = getGreenIndex(position);
+	greenIndex = getGreenIndex(pos);
 	redIndex = greenIndex+1;
 	
 	//Reset the leds
@@ -69,10 +69,11 @@ void Square::calibrateCNY70(int maxGreen, int minGreen, int maxRed, int minRed){
 void Square::setGreen(){
         clear();
 	writeValue(greenIndex, 1);
+        writeValue(redIndex, 0);
 }
 
 void Square::setRed(){
-	clear();
+	writeValue(greenIndex, 0);
 	writeValue(redIndex, 1);
 }
 
@@ -96,6 +97,10 @@ char Square::checkColor(){
 
 int Square::getIndex(){
         return _index;
+}
+
+int Square::getPosition(){
+        return _position;
 }
 
 

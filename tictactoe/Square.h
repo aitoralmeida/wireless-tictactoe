@@ -14,10 +14,23 @@ class Square
 		void clear();
 		char checkColor();
                 int getIndex();
+                int getPosition();
 		
 		
 
 	private:
+                int _analogPin;
+                int _position;
+                int _index; 
+                int greenIndex;
+                int redIndex;
+                int colorValue;
+                char color;
+                int _maxGreen;
+                int _minGreen;                
+                int _maxRed;
+                int _minRed;
+
 		int calculateIndex();
 		void writeValue(int index, int value);
                 int getGreenIndex(int pos);
