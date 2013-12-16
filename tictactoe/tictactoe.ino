@@ -43,6 +43,7 @@ void setup() {
 
 // the loop routine runs over and over again forever:
 void loop() {
+  delay(50);
   if (!redVictory && !greenVictory){
     updateColorStatus();
   }
@@ -51,11 +52,9 @@ void loop() {
   greenVictory = checkWin(greenStatus);
  
   if (redVictory){
-    clearSquares();
-    allRed();
+    victoryLoop('r');
   } else if (greenVictory){
-    clearSquares();
-    allGreen();
+    victoryLoop('g');
   }
 
 }
@@ -63,15 +62,15 @@ void loop() {
 
 //The calibration changes from sensor to sensor
 void calibrateSensors(){
-  squares[0]->calibrateCNY70(450, 400, 350, 290);
-  squares[1]->calibrateCNY70(230, 150, 140, 70);
-  squares[2]->calibrateCNY70(280, 200, 140, 70);
-  squares[3]->calibrateCNY70(410, 370, 250, 210);
-  squares[4]->calibrateCNY70(250, 210, 150, 100);
-  squares[5]->calibrateCNY70(370, 320, 220, 180);
-  squares[6]->calibrateCNY70(350, 300, 220, 180);
-  squares[7]->calibrateCNY70(470, 430, 370, 310);
-  squares[8]->calibrateCNY70(330, 290, 220, 180);  
+  squares[0]->calibrateCNY70(460, 400, 360, 280);
+  squares[1]->calibrateCNY70(240, 150, 145, 60);
+  squares[2]->calibrateCNY70(290, 200, 150, 60);
+  squares[3]->calibrateCNY70(420, 370, 260, 200);
+  squares[4]->calibrateCNY70(260, 210, 160, 90);
+  squares[5]->calibrateCNY70(380, 320, 230, 170);
+  squares[6]->calibrateCNY70(350, 300, 230, 170);
+  squares[7]->calibrateCNY70(480, 430, 380, 300);
+  squares[8]->calibrateCNY70(340, 290, 230, 170);  
 }
 
 void updateColorStatus(){
@@ -85,6 +84,8 @@ void updateColorStatus(){
       redStatus[i] = 1;
     } else if (color == 'n'){
       squares[i]->clear();
+      redStatus[i] = 0;
+      greenStatus[i] = 0;
     }
   }  
 }
@@ -140,18 +141,29 @@ void allGreen(){
   }
 }
 
+void victoryLoop(char color){
+  for (int i=0; i < 9; i++){
+    clearSquares();
+    if (color == 'g'){
+      squares[i]->setGreen();
+    } else if (color == 'r'){
+      squares[i]->setRed();
+    } 
+    delay(100);
+  }
+  
+}
+
 void restartGame(){
-  allClear();
+  clearSquares();
   allGreen();
   delay(200);
   allRed();
   delay(200);
   allGreen();
   delay(600);
-  allClear();
-  
-  redStatus [] = {0,0,0,0,0,0,0,0,0};
-  greenStatus [] = {0,0,0,0,0,0,0,0,0};
+  clearSquares();
+
   redVictory = false;
   greenVictory = false;
 }
