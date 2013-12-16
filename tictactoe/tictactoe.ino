@@ -57,8 +57,7 @@ void loop() {
     clearSquares();
     allGreen();
   }
-  
-  //Serial.println();  
+
 }
 
 
@@ -139,6 +138,22 @@ void allGreen(){
   for (int i=0; i < 9; i++){
     squares[i]->setGreen();
   }
+}
+
+void restartGame(){
+  allClear();
+  allGreen();
+  delay(200);
+  allRed();
+  delay(200);
+  allGreen();
+  delay(600);
+  allClear();
+  
+  redStatus [] = {0,0,0,0,0,0,0,0,0};
+  greenStatus [] = {0,0,0,0,0,0,0,0,0};
+  redVictory = false;
+  greenVictory = false;
 }
 
 void printStatus(){
