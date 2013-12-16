@@ -152,6 +152,13 @@ void victoryLoop(char color){
     delay(100);
   }
   
+  if (color == 'g'){
+      allGreen();
+  } else if (color == 'r'){
+      allRed();
+  } 
+  delay(100);
+  
 }
 
 void restartGame(){
