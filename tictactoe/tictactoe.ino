@@ -82,7 +82,7 @@ void updateColorStatus(){
     } else if (color == 'r'){
       squares[i]->setRed();
       redStatus[i] = 1;
-    } else if (color == 'n'){
+    } else{
       squares[i]->clear();
       redStatus[i] = 0;
       greenStatus[i] = 0;
