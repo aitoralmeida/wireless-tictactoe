@@ -12,6 +12,22 @@ Square * squares[9];
 //int gameStatus = 0; //0 = ongoing game, 1 = you win, 2 = opponent wins
 //int currentTurn = 0; //0 you, 1 opponent
 
+int redStatus [] = {0,0,0,0,0,0,0,0,0};
+int greenStatus [] = {0,0,0,0,0,0,0,0,0};
+
+int winConditions [][9] = {{1,1,1,0,0,0,0,0,0},
+                              {0,0,0,1,1,1,0,0,0},
+                              {0,0,0,0,0,0,1,1,1},
+                              {1,0,0,1,0,0,1,0,0},
+                              {0,1,0,0,1,0,0,1,0},
+                              {0,0,1,0,0,1,0,0,1},
+                              {1,0,0,0,1,0,0,0,1},
+                              {0,0,1,0,1,0,1,0,0}
+};
+
+boolean redVictory = false;
+boolean greenVictory = false;
+
 void setup() {  
   Serial.begin(9600);
   for (int i = 0; i < 9; i++){
@@ -21,14 +37,30 @@ void setup() {
   clearSquares();
   allGreen();
   delay(1000);
-  clearSquares();  
+  clearSquares(); 
+  
 }
 
 // the loop routine runs over and over again forever:
 void loop() {
-  adjustColors();
-  Serial.println(squares[7]->getColorValue());  
+  if (!redVictory && !greenVictory){
+    updateColorStatus();
+  }
+  
+  redVictory = checkWin(redStatus);
+  greenVictory = checkWin(greenStatus);
+ 
+  if (redVictory){
+    clearSquares();
+    allRed();
+  } else if (greenVictory){
+    clearSquares();
+    allGreen();
+  }
+  
+  //Serial.println();  
 }
+
 
 //The calibration changes from sensor to sensor
 void calibrateSensors(){
@@ -43,17 +75,51 @@ void calibrateSensors(){
   squares[8]->calibrateCNY70(330, 290, 220, 180);  
 }
 
-void adjustColors(){
+void updateColorStatus(){
   for (int i=0; i < 9; i++){
     char color = squares[i]->checkColor();
     if (color == 'g'){
       squares[i]->setGreen();
+      greenStatus[i] = 1;
     } else if (color == 'r'){
       squares[i]->setRed();
+      redStatus[i] = 1;
     } else if (color == 'n'){
       squares[i]->clear();
     }
+  }  
+}
+
+boolean isSame(int array1[], int array2[]){
+  boolean same = true;
+  for (int i=0; i < 9; i++){
+    if (same==false){
+      break;
+    }
+    if (array1[i] == array2[i]){
+      same = true;
+    } else {
+      same = false;
+    }
+  }  
+  return same;
+} 
+
+
+boolean checkWin(int statusArray[]){
+  boolean win = false;
+  for (int i=0; i < 8; i++){
+    if (win){
+      break;
+    }
+    //Mask to only take the needed values
+    int result[] = {0,0,0,0,0,0,0,0,0};
+    for (int j=0; j < 9; j++){
+      result[j] = statusArray[j] * winConditions[i][j];
+    }  
+    win = isSame(result, winConditions[i]); 
   }
+  return win;
   
 }
 
@@ -74,4 +140,19 @@ void allGreen(){
     squares[i]->setGreen();
   }
 }
+
+void printStatus(){
+  Serial.println("Red");
+  for (int i=0; i < 9; i++){
+    Serial.println(redStatus[i]);
+  }
+  Serial.println();
+  
+  Serial.println("Green");
+  for (int i=0; i < 9; i++){
+    Serial.println(greenStatus[i]);
+  }
+  Serial.println();
+}
+
 
