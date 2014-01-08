@@ -189,4 +189,9 @@ void printStatus(){
   Serial.println();
 }
 
+void checkColor(int s){
+  int colorValue = squares[s]->getColorValue();
+  Serial.println(colorValue);
+}
+
 
