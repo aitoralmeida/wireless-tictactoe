@@ -1,123 +1,197 @@
 #include <Shiftduino.h>
+#include "Square.h"
 
 int numShifts = 3;
-Shiftduino sd(30, 31 , 32, numShifts);
+int datapin = 22;
+int clockpin = 24;
+int latchpin = 23;
 
-//cny70 pins
-int colorPins[9] = {0,1,2,3,4,5,6,7,8};
+Shiftduino _sd(datapin, clockpin, latchpin, numShifts);
+Square * squares[9];
 
-//read color values
-int color[9];
+//int gameStatus = 0; //0 = ongoing game, 1 = you win, 2 = opponent wins
+//int currentTurn = 0; //0 you, 1 opponent
 
-//Color limits
-int redLow = 45;
-int redHigh = 55;
-int greenLow = 100;
-int greenHigh = 115;
+int redStatus [] = {0,0,0,0,0,0,0,0,0};
+int greenStatus [] = {0,0,0,0,0,0,0,0,0};
 
-//Reds, 0 or 1
-int reds[9] = {0,0,0,0,0,0,0,0,};
+int winConditions [][9] = {{1,1,1,0,0,0,0,0,0},
+                              {0,0,0,1,1,1,0,0,0},
+                              {0,0,0,0,0,0,1,1,1},
+                              {1,0,0,1,0,0,1,0,0},
+                              {0,1,0,0,1,0,0,1,0},
+                              {0,0,1,0,0,1,0,0,1},
+                              {1,0,0,0,1,0,0,0,1},
+                              {0,0,1,0,1,0,1,0,0}
+};
 
-//Greens, 0 or 1
-int greens[9] = {0,0,0,0,0,0,0,0,};
-
-int winConditions[][9] ={{1,1,1,0,0,0,0,0,0},{0,0,0,1,1,1,0,0,0},
-                        {0,0,0,0,0,0,1,1,1},{1,0,0,1,0,0,1,0,0},
-                        {0,1,0,0,1,0,0,1,0},{0,0,1,0,0,1,0,0,1},
-                        {1,0,0,0,1,0,0,0,1},{0,0,1,0,1,0,1,0,0}};
-
-//Led pins
-int redPins[9] = {0,2,4,6,8,10,12,14,16};
-int greenPins[9] = {1,3,5,7,9,11,13,15,17};
-
-//Game control variables
-int gameStatus = 0; //0 = ongoing game, 1 = you win, 2 = opponent wins
-int currentTurn = 0; //0 you, 1 opponent
-
-
-
+boolean redVictory = false;
+boolean greenVictory = false;
 
 void setup() {  
   Serial.begin(9600);
-  sd.clear();
+  for (int i = 0; i < 9; i++){
+    squares[i] = new Square(8 - i, i + 1, &_sd);
+  }
+  calibrateSensors();
+  clearSquares();
+  allGreen();
+  delay(1000);
+  clearSquares(); 
+  
 }
 
 // the loop routine runs over and over again forever:
 void loop() {
-  if (gameStatus == 0){ 
-    checkColors();
-    setLeds();
-    gameStatus = checkVictoryConditions(); 
-  } else if (gameStatus == 1){
-    victoryLoop(0,1);
-  } else if (gameStatus == 2){
-    victoryLoop(1,0);
+  delay(50);
+  if (!redVictory && !greenVictory){
+    updateColorStatus();
   }
+  
+  redVictory = checkWin(redStatus);
+  greenVictory = checkWin(greenStatus);
+ 
+  if (redVictory){
+    victoryLoop('r');
+  } else if (greenVictory){
+    victoryLoop('g');
+  }
+
 }
 
-//Blink leds when endgame is reached
-void victoryLoop(int redValue, int greenValue){
-  sd.clear();
-  while(true){ //TODO change this
-    for (int i = 0; i < 9; i++){
-      sd.setPin(redPins[i],redValue);
-      sd.setPin(greenPins[i],greenValue);
-      delay(50);
-      sd.setPin(redPins[i],0);
-      sd.setPin(greenPins[i],0);  
-    }
-  }
+
+//The calibration changes from sensor to sensor
+void calibrateSensors(){
+  squares[0]->calibrateCNY70(460, 400, 360, 280);
+  squares[1]->calibrateCNY70(240, 150, 145, 60);
+  squares[2]->calibrateCNY70(290, 200, 150, 60);
+  squares[3]->calibrateCNY70(420, 370, 260, 200);
+  squares[4]->calibrateCNY70(260, 210, 160, 90);
+  squares[5]->calibrateCNY70(380, 320, 230, 170);
+  squares[6]->calibrateCNY70(350, 300, 230, 170);
+  squares[7]->calibrateCNY70(480, 430, 380, 300);
+  squares[8]->calibrateCNY70(340, 290, 230, 170);  
 }
 
-//Set led values to used chip
-void setLeds(){
-  for(int i = 0; i < 9; i++){
-    if (reds[i] == 1){
-      sd.setPin(redPins[i],1);
-      sd.setPin(greenPins[i],0);
-    } else if(greens[i]== 1){
-      sd.setPin(redPins[i],0);
-      sd.setPin(greenPins[i],1);
+void updateColorStatus(){
+  for (int i=0; i < 9; i++){
+    char color = squares[i]->checkColor();
+    if (color == 'g'){
+      squares[i]->setGreen();
+      greenStatus[i] = 1;
+    } else if (color == 'r'){
+      squares[i]->setRed();
+      redStatus[i] = 1;
     } else{
-      sd.setPin(redPins[i],0);
-      sd.setPin(greenPins[i],0);
+      squares[i]->clear();
+      redStatus[i] = 0;
+      greenStatus[i] = 0;
     }
-  }
+  }  
 }
 
-//Checks the color of the used chip
-void checkColors(){
-  for(int i = 0; i < 9; i++){
-    int value = analogRead(colorPins[i]);  
-    char color = analyzeColor(value);
-    if (color = 'r'){
-      reds[i] = 1;
-      greens[i] = 0;
-    } else if (color = 'g'){
-      reds[i] = 0;
-      greens[i] = 1;
-    } else{
-      reds[i] = 0;
-      greens[i] = 0;
+boolean isSame(int array1[], int array2[]){
+  boolean same = true;
+  for (int i=0; i < 9; i++){
+    if (same==false){
+      break;
     }
-   
+    if (array1[i] == array2[i]){
+      same = true;
+    } else {
+      same = false;
+    }
+  }  
+  return same;
+} 
+
+
+boolean checkWin(int statusArray[]){
+  boolean win = false;
+  for (int i=0; i < 8; i++){
+    if (win){
+      break;
+    }
+    //Mask to only take the needed values
+    int result[] = {0,0,0,0,0,0,0,0,0};
+    for (int j=0; j < 9; j++){
+      result[j] = statusArray[j] * winConditions[i][j];
+    }  
+    win = isSame(result, winConditions[i]); 
+  }
+  return win;
+  
+}
+
+void clearSquares(){
+  for (int i=0; i < 9; i++){
+    squares[i]->clear();
   }
 }
 
-//identifies a color from the cny70 value
-char analyzeColor(int value){
-  char color = 'x';
-  if (color > redLow && color< redHigh){
-    color = 'r';
-  } else if (color > greenLow && color< greenHigh){
-    color = 'g';
+void allRed(){
+  for (int i=0; i < 9; i++){
+    squares[i]->setRed();
   }
-  return color;
 }
 
-//0 = ongoing game, 1 = you win, 2 = opponent wins
-int checkVictoryConditions(){
+void allGreen(){
+  for (int i=0; i < 9; i++){
+    squares[i]->setGreen();
+  }
+}
 
+void victoryLoop(char color){
+  for (int i=0; i < 9; i++){
+    clearSquares();
+    if (color == 'g'){
+      squares[i]->setGreen();
+    } else if (color == 'r'){
+      squares[i]->setRed();
+    } 
+    delay(100);
+  }
+  
+  if (color == 'g'){
+      allGreen();
+  } else if (color == 'r'){
+      allRed();
+  } 
+  delay(100);
+  
+}
+
+void restartGame(){
+  clearSquares();
+  allGreen();
+  delay(200);
+  allRed();
+  delay(200);
+  allGreen();
+  delay(600);
+  clearSquares();
+
+  redVictory = false;
+  greenVictory = false;
+}
+
+void printStatus(){
+  Serial.println("Red");
+  for (int i=0; i < 9; i++){
+    Serial.println(redStatus[i]);
+  }
+  Serial.println();
+  
+  Serial.println("Green");
+  for (int i=0; i < 9; i++){
+    Serial.println(greenStatus[i]);
+  }
+  Serial.println();
+}
+
+void checkColor(int s){
+  int colorValue = squares[s]->getColorValue();
+  Serial.println(colorValue);
 }
 
 
