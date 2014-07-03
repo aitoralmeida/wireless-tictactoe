@@ -51,6 +51,7 @@ int winConditions [][9] = {{1,1,1,0,0,0,0,0,0},
 boolean redVictory = false;
 boolean greenVictory = false;
 
+// hardware initialization
 void setup() {  
   Serial.begin(9600);
   Serial.println("Setup...");
@@ -71,7 +72,6 @@ void setup() {
   rival_id = findPlayer();
 }
 
-// the loop routine runs over and over again forever:
 void loop() {
   delay(200);
   
@@ -81,8 +81,8 @@ void loop() {
   for (int i = 0; i < 9; i++){
     previousGreenStatus[i] = greenStatus[i];
   }
-  // Update color status
-  // Check player move, wait until it happens
+  // 1 -Update color status
+  //   -Check player move, wait until it happens
   printMsg("Your turn.");
   boolean waitForMove = true;  
   int player_move = 0;
@@ -105,10 +105,10 @@ void loop() {
     }
   }
 
-  // Send move to server  
+  // 2- Send move to server  
   sendMove(player_move);
   
-  // Check victory conditions
+  // 3 -Check victory conditions
   greenVictory = checkWin(greenStatus);
   if (greenVictory){
     printMsg("A winner is you"); //TODO think some proper msgs
@@ -122,7 +122,7 @@ void loop() {
   // ************************************************************************
   printMsg("Wait for your rival's move.");
   
-  // Check rival move, wait until it happens
+  // 1- Check rival move, wait until it happens
   waitForMove = true;
   int rival_move = -1;
   while(waitForMove){
@@ -134,13 +134,13 @@ void loop() {
       waitForMove = false;    
     }
   }  
-  // Update color status
+  // 2- Update color status
   if (rival_move > -1 && rival_move  < 9){
     redStatus[rival_move] = 1;
     squares[rival_move]->setRed();
   }
   
-  // Check victory conditions
+  // 3 -Check victory conditions
   redVictory = checkWin(redStatus);
   if (redVictory){
     printMsg("You lose!"); 
@@ -302,10 +302,8 @@ int checkPlayerMove(){
     player_move = -3;
   }
   
-  return player_move;
-  
+  return player_move;  
 }
-
 
 void updateBoardStatus(){
   for (int i=0; i < 9; i++){
@@ -372,26 +370,40 @@ void checkColor(int s){
 }
 
 void victoryLoop(char color){
-  for (int i=0; i < 9; i++){
-    clearSquares();
+  boolean doVictory = true;
+  while (doVictory){
+    for (int i=0; i < 9; i++){
+      clearSquares();
+      if (color == 'g'){
+        squares[i]->setGreen();
+      } else if (color == 'r'){
+        squares[i]->setRed();
+      } 
+      delay(100);
+    }
+    
     if (color == 'g'){
-      squares[i]->setGreen();
+        allGreen();
     } else if (color == 'r'){
-      squares[i]->setRed();
+        allRed();
     } 
     delay(100);
+    
+    printMsg("Press green button for another game");
+    if (display.buttonsChanged()) {
+      byte reply = display.getButtons();
+      // Green button
+      if ((reply & 0x04) == 0x00){
+          doVictory = false;
+          // new game!
+          restartGame(); 
+      }
+    }
   }
-  
-  if (color == 'g'){
-      allGreen();
-  } else if (color == 'r'){
-      allRed();
-  } 
-  delay(100);
-  
 }
 
 void restartGame(){
+  
   clearSquares();
   allGreen();
   delay(200);
@@ -400,10 +412,33 @@ void restartGame(){
   allGreen();
   delay(600);
   clearSquares();
+  
+  // initialize rival id
+  rival_id = 0;
 
+  // initialize status
+  for (int i=0; i < 9; i++){
+    redStatus[i] = 0;
+    greenStatus[i] = 0;
+    previousGreenStatus[i] = 0;
+  } 
+  
+  // initialize squares
+  for (int i = 0; i < 9; i++){
+    squares[i] = new Square(8 - i, i + 1, &_sd);
+  }
+  
+  // initialize victory
   redVictory = false;
   greenVictory = false;
+  
+  // Show the welcome message
+  doWelcome();  
+  
+  // Find other player
+  rival_id = findPlayer();
 }
+
 
 /**********************************************
  *   COLOR CONTROL METHODS
