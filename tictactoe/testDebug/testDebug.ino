@@ -8,9 +8,9 @@
   This example code is in the public domain.
  */
 
-#define DEBUG1  70
+#define DEBUG1  72
 #define DEBUG2  71
-#define DEBUG3  72
+#define DEBUG3  70
 
 int led = DEBUG1;
 
