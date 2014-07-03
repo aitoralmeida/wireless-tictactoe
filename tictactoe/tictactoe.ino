@@ -75,7 +75,9 @@ void setup() {
 void loop() {
   delay(200);
   
-  // ******** Player turn *******
+  // ************************************************************************
+  // ******** Player turn ***************************************************
+  // ************************************************************************
   for (int i = 0; i < 9; i++){
     previousGreenStatus[i] = greenStatus[i];
   }
@@ -88,16 +90,16 @@ void loop() {
   while (waitForMove){
     updateBoardStatus();  
     player_move = checkPlayerMove();
-    if (player_move == 0){
+    if (player_move == -1){
       // No move, wait and check again
       delay(30);
-    }else if (player_move > 0){
+    }else if (player_move > -1){
       // Legal move, continue
       waitForMove = false;
-    } else if (player_move == -1){
+    } else if (player_move == -2){
       // Player has moved 2 pieces, illegal move      
       msgAndWait("You moved two pieces! Correct you move.");      
-    } else if (player_move == -2){
+    } else if (player_move == -3){
       // Player has moved the piece into an square already used.     
       msgAndWait("You moved your piece into an already used square! Correct you move.");
     }
@@ -115,32 +117,35 @@ void loop() {
   
   
   
-  // ******* Rival turn *******
+  // ************************************************************************
+  // ******* Rival turn *****************************************************
+  // ************************************************************************
+  printMsg("Wait for your rival's move.");
+  
   // Check rival move, wait until it happens
+  waitForMove = true;
+  int rival_move = -1;
+  while(waitForMove){
+    rival_move = getMove();
+    // Wait and check again
+    if (rival_move < 0){
+      delay(100);
+    } else{
+      waitForMove = false;    
+    }
+  }  
   // Update color status
+  if (rival_move > -1 && rival_move  < 9){
+    redStatus[rival_move] = 1;
+    squares[rival_move]->setRed();
+  }
+  
   // Check victory conditions
-  
-  
-  
-  
-  int rivalMove = getMove();
-  redStatus[rivalMove] = 1;
-  
-  if (!redVictory && !greenVictory){
-    updateColorStatus();
-  }
-  
-  
   redVictory = checkWin(redStatus);
-  greenVictory = checkWin(greenStatus);
- 
   if (redVictory){
+    printMsg("You lose!"); 
     victoryLoop('r');
-  } else if (greenVictory){
-    victoryLoop('g');
   }
-  
-
 }
 
 /**********************************************
@@ -242,7 +247,7 @@ int getMove(){
 void sendMove(int player_move){
   //TODO
   // send ("MOVE " + player_move + player_id)
-  return 0;
+  Serial.println("sending move");
 }
 
 
@@ -268,7 +273,11 @@ void calibrateSensors(){
 /**********************************************
  *   GAME LOGIC
  **********************************************/
- 
+
+// -1 -> no move
+// -2 -> illegal move, 2 pieces moved
+// -3 -> illegal move, moved into a square used by the rival
+// 0..8 -> legal move
 int checkPlayerMove(){
   int totalMoves = 0;
   int player_move = 0;
@@ -277,20 +286,20 @@ int checkPlayerMove(){
     color = squares[i]->checkColor();
     if (previousGreenStatus[i] != greenStatus[i]){
       totalMoves++;
-      player_move = i+1;
+      player_move = i;
     }
   }
   
   if (totalMoves == 0) {
     // The player has not done any move
-    player_move = 0;
+    player_move = -1;
   } else if (totalMoves > 1) {
     // The player has moved 2 pieces, which is an illegal move
-    player_move = -1;
+    player_move = -2;
   }
   else if (color == 'r'){
     // The player has moved his piece into an square already used by the rival
-    player_move = -2;
+    player_move = -3;
   }
   
   return player_move;
