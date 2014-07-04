@@ -232,7 +232,9 @@ void doWelcome(){
     }  
   }
   display.clear();
-  display.printText("Starting new game!", 6, 1, GREEN);  
+  display.printText("Starting a new game!", 6, 1, GREEN);
+  delay(300); 
+  
 }
 
 void msgAndWait(String msg){
