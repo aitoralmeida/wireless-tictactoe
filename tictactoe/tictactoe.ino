@@ -6,9 +6,17 @@
 #include <SM125.h> //RFID
 #include <SoundPlayer.h>
 
+// Hardware addresses
 #define DISPLAY_ADDRESS  0x51
 #define BUTTONS_CHANGE   43
 #define SM125_ADDRESS 0x46
+// Sound addresses
+#define WELCOME 0x5 //Welcome screen
+#define YOU_WIN 0x1 //The Player wins
+#define YOU_LOSE 0x2 //The Rival wins
+#define VICTORY_LOOP 0x3 //Victory loop!!!
+#define NO_NO 0x4 //Illegal move
+
 
 // Baseboard screen
 GraphicDisplay display;
@@ -111,10 +119,12 @@ void loop() {
         waitForMove = false;
       } else if (player_move == -2){
         // Player has moved 2 pieces, illegal move      
-        msgAndWait("You moved two pieces! Correct you move.");      
+        msgAndWait("You moved two pieces! Correct you move.");
+        soundPlayer.play(NO_NO);      
       } else if (player_move == -3){
         // Player has moved the piece into an square already used.     
         msgAndWait("You moved your piece into an already used square! Correct you move.");
+        soundPlayer.play(NO_NO);  
       }
     }
   
@@ -125,7 +135,7 @@ void loop() {
     greenVictory = checkWin(greenStatus);
     if (greenVictory){
       printMsg("A winner is you"); //TODO think some proper msgs
-      soundPlayer.play(0x5);
+      soundPlayer.play(YOU_WIN);
       victoryLoop('g');
     }
   }
@@ -157,7 +167,8 @@ void loop() {
     // 3 -Check victory conditions
     redVictory = checkWin(redStatus);
     if (redVictory){
-      printMsg("You lose!"); 
+      printMsg("You lose!");
+     soundPlayer.play(YOU_LOSE); 
       victoryLoop('r');
     }
   }
@@ -216,7 +227,7 @@ void doWelcome(){
   display.clear();
   soundPlayer.stop();
   display.printText("Welcome to the tictactoe game!", 6, 1, BLUE);
-  soundPlayer.play(0x5);
+  soundPlayer.play(WELCOME);
   delay(1000);
   display.clear();
   display.printText("Press green button to find another player...", 6, 1, GREEN);
@@ -408,6 +419,7 @@ void checkColor(int s){
 
 void victoryLoop(char color){
   boolean doVictory = true;
+  soundPlayer.play(VICTORY_LOOP);
   while (doVictory){
     for (int i=0; i < 9; i++){
       clearSquares();
@@ -432,6 +444,7 @@ void victoryLoop(char color){
       // Green button
       if ((reply & 0x04) == 0x00){
           doVictory = false;
+          soundPlayer.stop();
           // new game!
           restartGame(); 
       }
