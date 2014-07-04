@@ -3,7 +3,8 @@
 
 #include <Wire.h>
 #include <GraphicDisplay.h>
-#include <SM125.h>
+#include <SM125.h> //RFID
+#include <SoundPlayer.h>
 
 #define DISPLAY_ADDRESS  0x51
 #define BUTTONS_CHANGE   43
@@ -13,6 +14,8 @@
 GraphicDisplay display;
 // Baseboard RFID reader
 SM125 sm125;
+// Baseboard sound player
+SoundPlayer soundPlayer;
 
 // Configuration for the shift registers
 int numShifts = 3;
@@ -23,8 +26,14 @@ int latchpin = 23;
 Shiftduino _sd(datapin, clockpin, latchpin, numShifts);
 
 // Unique board ID (TODO: right now is set manually for testing purposes)
-int player_id = 1;
-int rival_id = 0;
+String player_id = "1000";
+// Rival board id
+String rival_id = "0";
+// Who starts playing: 0 the player, 1 the rival.
+char start_turn = '2';
+
+// Current turn
+int turn = 0;
 
 // Each of the squares of the tictactoe
 Square * squares[9];
@@ -55,7 +64,7 @@ boolean greenVictory = false;
 void setup() {  
   Serial.begin(9600);
   Serial.println("Setup...");
-  // Initialize the tictactoe board
+  // 1 - Initialize the tictactoe board
   for (int i = 0; i < 9; i++){
     squares[i] = new Square(8 - i, i + 1, &_sd);
   }
@@ -64,87 +73,90 @@ void setup() {
   allGreen();
   delay(1000);
   clearSquares();
-  // Initialize the baseboard peripherals 
+  // 2 - Initialize the baseboard peripherals 
   initializeHardwarePeripherals();
-  // Show the welcome message
+  // 3 - Show the welcome message
   doWelcome();  
-  // Find other player
-  rival_id = findPlayer();
+  // 4 - Find other player
+  String result = findPlayer();
+  start_turn = result[4];
+  rival_id = result.substring(0,4);
 }
 
 void loop() {
   delay(200);
+  if ((turn > 0) || (turn == 0 && start_turn=='0')){
+    // ************************************************************************
+    // ******** Player turn ***************************************************
+    // ************************************************************************
+    for (int i = 0; i < 9; i++){
+      previousGreenStatus[i] = greenStatus[i];
+    }
+    // 1 -Update color status
+    //   -Check player move, wait until it happens
+    printMsg("Your turn.");
+    boolean waitForMove = true;  
+    int player_move = 0;
+    
+    while (waitForMove){
+      updateBoardStatus();  
+      player_move = checkPlayerMove();
+      if (player_move == -1){
+        // No move, wait and check again
+        delay(30);
+      }else if (player_move > -1){
+        // Legal move, continue
+        waitForMove = false;
+      } else if (player_move == -2){
+        // Player has moved 2 pieces, illegal move      
+        msgAndWait("You moved two pieces! Correct you move.");      
+      } else if (player_move == -3){
+        // Player has moved the piece into an square already used.     
+        msgAndWait("You moved your piece into an already used square! Correct you move.");
+      }
+    }
   
-  // ************************************************************************
-  // ******** Player turn ***************************************************
-  // ************************************************************************
-  for (int i = 0; i < 9; i++){
-    previousGreenStatus[i] = greenStatus[i];
-  }
-  // 1 -Update color status
-  //   -Check player move, wait until it happens
-  printMsg("Your turn.");
-  boolean waitForMove = true;  
-  int player_move = 0;
-  
-  while (waitForMove){
-    updateBoardStatus();  
-    player_move = checkPlayerMove();
-    if (player_move == -1){
-      // No move, wait and check again
-      delay(30);
-    }else if (player_move > -1){
-      // Legal move, continue
-      waitForMove = false;
-    } else if (player_move == -2){
-      // Player has moved 2 pieces, illegal move      
-      msgAndWait("You moved two pieces! Correct you move.");      
-    } else if (player_move == -3){
-      // Player has moved the piece into an square already used.     
-      msgAndWait("You moved your piece into an already used square! Correct you move.");
+    // 2- Send move to server  
+    sendMove(player_move);
+    
+    // 3 -Check victory conditions
+    greenVictory = checkWin(greenStatus);
+    if (greenVictory){
+      printMsg("A winner is you"); //TODO think some proper msgs
+      victoryLoop('g');
     }
   }
-
-  // 2- Send move to server  
-  sendMove(player_move);
   
-  // 3 -Check victory conditions
-  greenVictory = checkWin(greenStatus);
-  if (greenVictory){
-    printMsg("A winner is you"); //TODO think some proper msgs
-    victoryLoop('g');
-  }
-  
-  
-  
-  // ************************************************************************
-  // ******* Rival turn *****************************************************
-  // ************************************************************************
-  printMsg("Wait for your rival's move.");
-  
-  // 1- Check rival move, wait until it happens
-  waitForMove = true;
-  int rival_move = -1;
-  while(waitForMove){
-    rival_move = getMove();
-    // Wait and check again
-    if (rival_move < 0){
-      delay(100);
-    } else{
-      waitForMove = false;    
+  if ((turn > 0) || (turn == 0 && start_turn=='1')){
+    // ************************************************************************
+    // ******* Rival turn *****************************************************
+    // ************************************************************************
+    printMsg("Wait for your rival's move.");
+    
+    // 1- Check rival move, wait until it happens
+    waitForMove = true;
+    int rival_move = -1;
+    while(waitForMove){
+      rival_move = getMove();
+      // Wait and check again
+      if (rival_move < 0){
+        delay(100);
+      } else{
+        waitForMove = false;    
+      }
+    }  
+    // 2- Update color status
+    if (rival_move > -1 && rival_move  < 9){
+      redStatus[rival_move] = 1;
+      squares[rival_move]->setRed();
     }
-  }  
-  // 2- Update color status
-  if (rival_move > -1 && rival_move  < 9){
-    redStatus[rival_move] = 1;
-    squares[rival_move]->setRed();
-  }
-  
-  // 3 -Check victory conditions
-  redVictory = checkWin(redStatus);
-  if (redVictory){
-    printMsg("You lose!"); 
-    victoryLoop('r');
+    
+    // 3 -Check victory conditions
+    redVictory = checkWin(redStatus);
+    if (redVictory){
+      printMsg("You lose!"); 
+      victoryLoop('r');
+    }
   }
 }
 
@@ -154,11 +166,23 @@ void loop() {
  
 void initializeHardwarePeripherals(){
   initializeRFID();
+  initializeSoundPlayer();
   initializeScreen();
 }
 
 void initializeRFID(){
   sm125.begin(SM125_ADDRESS);
+}
+
+void initializeSoundPlayer(){
+  soundPlayer.begin(0x61);
+  int ver = soundPlayer.getVersion();  
+  switch(ver)
+  {
+  case 0x10:
+    Serial.println("Version: 1.0)");
+    break;
+  }
 }
 
 void initializeScreen(){
@@ -230,23 +254,28 @@ void printMsg(String msg){
  *   COMMUNICATION WITH THE GAME SERVER
  **********************************************/
 
-int findPlayer(){
+String findPlayer(){
   //TODO
   // rival_id = send ("REGISTER " + player_id + "\0n")
-  // returns the rival_id
-  return 113;
+  // returns the rival_id and who starts playing
+  // REGISTER ####
+  // ##### -> first 4 numbers is the rival id and the 5th is who plays first. 0 the player and 1 the rival
+  return "10020";
 
 }
 
 int getMove(){
   //TODO
   // move = send ("GET_MOVE " + rival_id)
+  // GET_MOVE ####
+  // # -> a number between 0 and 8
   return 0;
 }
 
 void sendMove(int player_move){
   //TODO
   // send ("MOVE " + player_move + player_id)
+  // MOVE # ####
   Serial.println("sending move");
 }
 
