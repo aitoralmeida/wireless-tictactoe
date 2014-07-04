@@ -382,16 +382,22 @@ void updateColorStatus(){
 
 boolean isSame(int array1[], int array2[]){
   boolean same = true;
-  for (int i=0; i < 9; i++){
-    if (same==false){
-      break;
+  int size1 = sizeof(array1);
+  int size2 = sizeof(array2);
+    if (size1 == 9 && size2 == 9){
+    for (int i=0; i < 9; i++){
+      if (same==false){
+        break;
+      }
+      if (array1[i] == array2[i]){
+        same = true;
+      } else {
+        same = false;
+      }
     }
-    if (array1[i] == array2[i]){
-      same = true;
-    } else {
-      same = false;
-    }
-  }  
+  } else {
+    same = false;
+  } 
   return same;
 } 
 
