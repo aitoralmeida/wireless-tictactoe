@@ -85,6 +85,8 @@ void setup() {
 
 void loop() {
   delay(200);
+  boolean waitForMove = true;
+  
   if ((turn > 0) || (turn == 0 && start_turn=='0')){
     // ************************************************************************
     // ******** Player turn ***************************************************
@@ -95,7 +97,7 @@ void loop() {
     // 1 -Update color status
     //   -Check player move, wait until it happens
     printMsg("Your turn.");
-    boolean waitForMove = true;  
+      
     int player_move = 0;
     
     while (waitForMove){
@@ -123,6 +125,7 @@ void loop() {
     greenVictory = checkWin(greenStatus);
     if (greenVictory){
       printMsg("A winner is you"); //TODO think some proper msgs
+      soundPlayer.play(0x5);
       victoryLoop('g');
     }
   }
@@ -211,7 +214,9 @@ void initializeScreen(){
 
 void doWelcome(){
   display.clear();
+  soundPlayer.stop();
   display.printText("Welcome to the tictactoe game!", 6, 1, BLUE);
+  soundPlayer.play(0x5);
   delay(1000);
   display.clear();
   display.printText("Press green button to find another player...", 6, 1, GREEN);
@@ -222,6 +227,7 @@ void doWelcome(){
       // Green button
       if ((reply & 0x04) == 0x00){
           doLoop = false;
+          soundPlayer.stop();
       }
     }  
   }
