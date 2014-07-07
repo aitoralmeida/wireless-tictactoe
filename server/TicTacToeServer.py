@@ -8,27 +8,33 @@ Created on Fri Jul 04 12:10:33 2014
 from socket import *
 import thread
 
+# Connection config
 HOST, PORT = "localhost", 9999
-
-END_CHAR = '\0d'
-CMD_REGISTER = "REGISTER"
-CMD_FIND_GAME = "FIND_GAME"
-MSG_WAITING_PLAYERS = "WAITING_FOR_PLAYERS"
-MSG_RIVAL = "RIVAL"
-MSG_UNREGISTERED = "UNREGISTERED"
-
-
-
 BUFF = 1024
-HOST = '127.0.0.1'
-PORT = 9999 
+
+# Protocol msgs
+END_CHAR = '\0d'
+CMD_REGISTER = "REGISTER" # id
+CMD_FIND_GAME = "FIND_GAME" # id
+CMD_DO_MOVE =  "DO_MOVE" # id movement(0..8)
+CMD_GET_MOVE = "GET_MOVE" # id
+MSG_WAITING_PLAYERS = "WAITING_FOR_PLAYERS"
+MSG_RIVAL = "RIVAL" # rival_id turn(0/1)
+MSG_NOT_REGISTERED = "NOT_REGISTERED"
+MSG_WAIT_FOR_MOVE = "WAIT_FOR_MOVE"
+MSG_WAIT_FOR_RIVAL = "WAIT_FOR_RIVAL"
+MSG_RIVAL_MOVE = "RIVAL_MOVE" # rival_id move
+
+
 
 class TicTacToeServer:
     
     def __init__(self):
         self.waiting_players = []
         self.player1 = ''
+        self.player1_move = ''
         self.player2 = ''
+        self.player2_move = ''
 
     def response(key):
         return 'Server response: ' + key
@@ -41,11 +47,13 @@ class TicTacToeServer:
             #print repr(addr) + ' sent:' + repr(response(data))
                         
             if data.startswith(CMD_REGISTER):
+                #REGISTER ID
                 player_id = data.split(' ')[1]
                 self.waiting_players.append(player_id)
                 print "REGISTER %s" % (player_id)
                 print "Total players: %i" % (len(self.waiting_players))
             elif data.startswith(CMD_FIND_GAME):
+                #FIND_GAME ID
                 print data.split(' ')
                 player_id = data.split(' ')[1]
                 print "FIND_GAME %s" % (player_id)
@@ -54,13 +62,13 @@ class TicTacToeServer:
                     print "Turn already assigned."
                     clientsock.send("%s %s %i%s" % (MSG_RIVAL, self.player1, 1, END_CHAR))
                     
-                elif self.player1 == player_id: # When doing it randomly it will not be player2
+                elif self.player1 == player_id: # When doing it randomly it will not be player1
                     print "Turn already assigned."
                     clientsock.send("%s %s %i%s" % (MSG_RIVAL, self.player2, 0, END_CHAR))
                     
                 elif player_id not in self.waiting_players:
                     print 'Player has to register first.'
-                    clientsock.send(MSG_UNREGISTERED + END_CHAR)
+                    clientsock.send(MSG_NOT_REGISTERED + END_CHAR)
                     
                 
                 elif len(self.waiting_players) > 1: 
@@ -80,6 +88,41 @@ class TicTacToeServer:
                 else:
                     print "Wait for players."
                     clientsock.send(MSG_WAITING_PLAYERS + END_CHAR)
+            elif data.startswith(CMD_DO_MOVE):
+                # DO_MOVE id movement
+                player_id = data.split(' ')[1]
+                move = data.split(' ')[2]
+                
+                if self.player2 == player_id:
+                    if self.player2_move != '':
+                        clientsock.send(MSG_WAIT_FOR_RIVAL + END_CHAR)
+                    else:
+                        self.player2_move = move
+                        
+                elif self.player1 == player_id:
+                    if self.player2_move != '':
+                        clientsock.send(MSG_WAIT_FOR_RIVAL + END_CHAR)
+                    else:
+                        self.player2_move = move
+            
+            elif data.startswith(CMD_GET_MOVE):
+                # GET_MOVE id
+                player_id = data.split(' ')[1]                
+                
+                if self.player1 != player_id:
+                    if self.player1_move == '':
+                        clientsock.send(MSG_WAIT_FOR_MOVE + END_CHAR)
+                    else:
+                        clientsock.send(MSG_RIVAL_MOVE + self.player1 + self.player1_move + END_CHAR)
+                        self.player1_move = ''
+                        
+                elif self.player2 != player_id:
+                    if self.player2_move == '':
+                        clientsock.send(MSG_WAIT_FOR_MOVE + END_CHAR)
+                    else:
+                        clientsock.send(MSG_RIVAL_MOVE + self.player2 + self.player2_move + END_CHAR)
+                        self.player2_move = ''
+                
 
     
         clientsock.close()
