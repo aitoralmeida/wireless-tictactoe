@@ -24,6 +24,8 @@ MSG_NOT_REGISTERED = "NOT_REGISTERED"
 MSG_WAIT_FOR_MOVE = "WAIT_FOR_MOVE"
 MSG_WAIT_FOR_RIVAL = "WAIT_FOR_RIVAL"
 MSG_RIVAL_MOVE = "RIVAL_MOVE" # rival_id move
+MSG_ACK = "ACK" # rival_id move
+
 
 
 
@@ -90,36 +92,57 @@ class TicTacToeServer:
                     clientsock.send(MSG_WAITING_PLAYERS + END_CHAR)
             elif data.startswith(CMD_DO_MOVE):
                 # DO_MOVE id movement
+                
                 player_id = data.split(' ')[1]
                 move = data.split(' ')[2]
+                print 'Player:', player_id
+                print 'Move:', move
+            
+                
+                print '-Player 1:', self.player1, self.player1_move
+                print '-Player 2:', self.player2, self.player2_move
+                
                 
                 if self.player2 == player_id:
                     if self.player2_move != '':
+                        print "Previous move not retrieved"
                         clientsock.send(MSG_WAIT_FOR_RIVAL + END_CHAR)
                     else:
+                        print "Storing move for player 2"
                         self.player2_move = move
+                        clientsock.send(MSG_ACK + END_CHAR)
                         
                 elif self.player1 == player_id:
-                    if self.player2_move != '':
+                    if self.player1_move != '':
+                        print "Previous move not retrieved"
                         clientsock.send(MSG_WAIT_FOR_RIVAL + END_CHAR)
                     else:
-                        self.player2_move = move
+                        print "Storing move for player 1"
+                        self.player1_move = move
+                        clientsock.send(MSG_ACK + END_CHAR)
             
             elif data.startswith(CMD_GET_MOVE):
                 # GET_MOVE id
-                player_id = data.split(' ')[1]                
+                player_id = data.split(' ')[1]  
+                
+                print '-Player 1:', self.player1, self.player1_move
+                print '-Player 2:', self.player2, self.player2_move
                 
                 if self.player1 != player_id:
                     if self.player1_move == '':
+                        print "Waiting for player 1 move"
                         clientsock.send(MSG_WAIT_FOR_MOVE + END_CHAR)
                     else:
+                        print "Sending player 1 move: ", self.player1_move
                         clientsock.send(MSG_RIVAL_MOVE + self.player1 + self.player1_move + END_CHAR)
                         self.player1_move = ''
                         
                 elif self.player2 != player_id:
                     if self.player2_move == '':
+                        print "Waiting for player 2 move"
                         clientsock.send(MSG_WAIT_FOR_MOVE + END_CHAR)
                     else:
+                        print "Sending player 2 move:", self.player2_move
                         clientsock.send(MSG_RIVAL_MOVE + self.player2 + self.player2_move + END_CHAR)
                         self.player2_move = ''
                 
