@@ -119,7 +119,6 @@ class TicTacToeServer:
                 print '-Turn:', self.current_turn
                 print '-Player 1:', self.player1, self.player1_move
                 print '-Player 2:', self.player2, self.player2_move
-                print ''
                 
                 if self.current_turn == player_id:
                     if self.player2 == player_id:
@@ -163,7 +162,6 @@ class TicTacToeServer:
                 print '-Turn:', self.current_turn
                 print '-Player 1:', self.player1, self.player1_move
                 print '-Player 2:', self.player2, self.player2_move
-                print ''
                 
                 if self.player1 != player_id:
                     if self.player1_move == '':
@@ -183,7 +181,7 @@ class TicTacToeServer:
                         clientsock.send(MSG_RIVAL_MOVE + self.player2 + self.player2_move + END_CHAR)
                         self.player2_move = ''
                 
-                print 'Port get_move'
+                print 'Post get_move'
                 print '-Turn:', self.current_turn
                 print '-Player 1:', self.player1, self.player1_move
                 print '-Player 2:', self.player2, self.player2_move
