@@ -86,6 +86,7 @@ void setup() {
   // 3 - Show the welcome message
   doWelcome();  
   // 4 - Find other player
+  display.printText("Waiting for players...", 6, 1, GREEN);
   String result = findPlayer();
   start_turn = result[4];
   rival_id = result.substring(0,4);
@@ -275,7 +276,7 @@ void printMsg(String msg){
 
 String findPlayer(){
   //TODO
-  // rival_id = send ("REGISTER " + player_id + "\0n")
+  // rival_id = send ("REGISTER " + player_id)
   // returns the rival_id and who starts playing
   // REGISTER ####
   // ##### -> first 4 numbers is the rival id and the 5th is who plays first. 0 the player and 1 the rival
@@ -297,6 +298,9 @@ void sendMove(int player_move){
   // MOVE # ####
   Serial.println("sending move");
 }
+
+void sendMsg(String msg){}
+String sendAndWait(String msg){ return "foo" }
 
 
 /**********************************************
@@ -531,6 +535,71 @@ void printStatus(){
     Serial.println(greenStatus[i]);
   }
   Serial.println();
+}
+
+/**********************************************
+ *   COMMUNICATION METHODS
+ **********************************************/
+
+// getCommand
+//
+// Get the command string of the message
+String getCommand(String message) {
+
+  int index = message.indexOf(' ');
+  if (index != -1)
+    return message.substring(0, index);
+  else
+    return message;
+}
+
+// getParameters
+//
+// Get the parameters of the message
+String getParameters(String message) {
+
+  int index = message.indexOf(' ');
+  if (index != -1)
+    return message.substring(index + 1);
+  else
+    return "";
+}
+
+// numberOfParameters
+//
+// Get tne number of parameters
+int numberOfParameters(String parameters) {
+
+  if (parameters.equals(""))
+    return 0;
+  else {
+    String temp = parameters;
+    int count = 0, index;
+    do {
+      index = temp.indexOf(',');
+      temp = temp.substring(index + 1);
+      count++;
+    }
+    while (index >= 0);
+    return count;
+  }
+}
+
+// getParamenter
+//
+// Get a parameter defined for its position (1, 2, 3...)
+String getParameter(String parameters, int position) {
+
+  String temp = parameters, parameter;
+  int count = 0, index;
+  do {
+    index = temp.indexOf(',');
+    parameter = temp.substring(0, index);
+    temp = temp.substring(index + 1);
+    count++;
+  }
+  while (count != position);
+  return parameter;
 }
 
 
