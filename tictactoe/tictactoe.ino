@@ -17,12 +17,21 @@
 #define VICTORY_LOOP 0x3 //Victory loop!!!
 #define NO_NO 0x4 //Illegal move
 
-//Communication msgs
+// Communication msgs
 String MSG_REGISTER = "REGISTER"; // id
 String MSG_FIND_GAME = "FIND_GAME"; // id
 String MSG_DO_MOVE =  "DO_MOVE"; // id movement(0..8)
 String MSG_GET_MOVE = "GET_MOVE"; // id
 String END_CHAR = "\0d"; // id
+// Server commands
+String CMD_WAITING_PLAYERS = "WAITING_FOR_PLAYERS";
+String CMD_RIVAL = "RIVAL"; // rival_id turn(0/1)
+String CMD_NOT_REGISTERED = "NOT_REGISTERED";
+String CMD_WAIT_FOR_MOVE = "WAIT_FOR_MOVE";
+String CMD_WAIT_FOR_RIVAL = "WAIT_FOR_RIVAL";
+String CMD_WAIT_FOR_TURN = "WAIT_FOR_TURN";
+String CMD_RIVAL_MOVE = "RIVAL_MOVE"; // # rival_id move
+String CMD_ACK = "ACK"; // rival_id move
 
 
 // Baseboard screen
@@ -45,7 +54,7 @@ String player_id = "1000";
 // Rival board id
 String rival_id = "0";
 // Who starts playing: 0 the player, 1 the rival.
-char start_turn = '2';
+String start_turn = "2";
 
 // Current turn
 int turn = 0;
@@ -92,18 +101,18 @@ void setup() {
   initializeHardwarePeripherals();
   // 3 - Show the welcome message
   doWelcome();  
-  // 4 - Find other player
+  // 4 - Register the player in the server
+  registerPlayer();
+  // 5 - Find other player
   display.printText("Waiting for players...", 6, 1, GREEN);
-  String result = findPlayer();
-  start_turn = result[4];
-  rival_id = result.substring(0,4);
+  findPlayer();
 }
 
 void loop() {
   delay(200);
   boolean waitForMove = true;
   
-  if ((turn > 0) || (turn == 0 && start_turn=='0')){
+  if ((turn > 0) || (turn == 0 && start_turn=="0")){
     // ************************************************************************
     // ******** Player turn ***************************************************
     // ************************************************************************
@@ -148,7 +157,7 @@ void loop() {
     }
   }
   
-  if ((turn > 0) || (turn == 0 && start_turn=='1')){
+  if ((turn > 0) || (turn == 0 && start_turn=="1")){
     // ************************************************************************
     // ******* Rival turn *****************************************************
     // ************************************************************************
@@ -285,14 +294,26 @@ void registerPlayer(){
   sendMsg(MSG_REGISTER + player_id + END_CHAR);
 }
 
-String findPlayer(){
-  //TODO
-  // rival_id = send ("REGISTER " + player_id)
-  // returns the rival_id and who starts playing
-  // REGISTER ####
-  // ##### -> first 4 numbers is the rival id and the 5th is who plays first. 0 the player and 1 the rival
-  return "10020";
-
+void findPlayer(){
+  boolean notFound = true;
+  while(notFound){
+    String res = sendAndWait(MSG_FIND_GAME + player_id + END_CHAR);
+    String command = getCommand(res);
+    
+    // if waiting_for_player -> delay 100
+    // if not_registered -> register
+    // if rival -> set start_turn, set rival_id, notFound = false
+    if (command == CMD_WAIT_FOR_RIVAL){
+      delay(1000);
+    } else if (command == CMD_NOT_REGISTERED){ // This shouldn't happen
+      registerPlayer();
+    } else if (command == CMD_RIVAL){
+      String parameters = getParameters(res);
+      rival_id = getParameter(parameters, 1);
+      start_turn = getParameter(parameters, 2);
+      notFound = false;
+    }
+  }
 }
 
 int getMove(){
@@ -311,7 +332,7 @@ void sendMove(int player_move){
 }
 
 void sendMsg(String msg){}
-String sendAndWait(String msg){ return "foo" }
+String sendAndWait(String msg){ return "foo"; }
 
 
 /**********************************************
@@ -507,7 +528,7 @@ void restartGame(){
   doWelcome();  
   
   // Find other player
-  rival_id = findPlayer();
+  findPlayer();
 }
 
 
