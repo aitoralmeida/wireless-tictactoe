@@ -17,6 +17,13 @@
 #define VICTORY_LOOP 0x3 //Victory loop!!!
 #define NO_NO 0x4 //Illegal move
 
+//Communication msgs
+String MSG_REGISTER = "REGISTER"; // id
+String MSG_FIND_GAME = "FIND_GAME"; // id
+String MSG_DO_MOVE =  "DO_MOVE"; // id movement(0..8)
+String MSG_GET_MOVE = "GET_MOVE"; // id
+String END_CHAR = "\0d"; // id
+
 
 // Baseboard screen
 GraphicDisplay display;
@@ -273,6 +280,10 @@ void printMsg(String msg){
 /**********************************************
  *   COMMUNICATION WITH THE GAME SERVER
  **********************************************/
+ 
+void registerPlayer(){
+  sendMsg(MSG_REGISTER + player_id + END_CHAR);
+}
 
 String findPlayer(){
   //TODO
