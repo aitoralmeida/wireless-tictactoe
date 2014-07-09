@@ -12,12 +12,16 @@ import thread
 HOST, PORT = "localhost", 9999
 BUFF = 1024
 
-# Protocol msgs
+#*********************
+#* Protocol messages *
+#*********************
 END_CHAR = '\0d'
+# Client commands
 CMD_REGISTER = "REGISTER" # id
 CMD_FIND_GAME = "FIND_GAME" # id
 CMD_DO_MOVE =  "DO_MOVE" # id movement(0..8)
 CMD_GET_MOVE = "GET_MOVE" # id
+# Response msgs
 MSG_WAITING_PLAYERS = "WAITING_FOR_PLAYERS"
 MSG_RIVAL = "RIVAL" # rival_id turn(0/1)
 MSG_NOT_REGISTERED = "NOT_REGISTERED"
@@ -26,8 +30,6 @@ MSG_WAIT_FOR_RIVAL = "WAIT_FOR_RIVAL"
 MSG_WAIT_FOR_TURN = "WAIT_FOR_TURN"
 MSG_RIVAL_MOVE = "RIVAL_MOVE" # rival_id move
 MSG_ACK = "ACK" # rival_id move
-
-
 
 
 class TicTacToeServer:
@@ -39,16 +41,11 @@ class TicTacToeServer:
         self.player2 = ''
         self.player2_move = ''
         self.current_turn = ''
-
-    def response(key):
-        return 'Server response: ' + key
     
     def handler(self, clientsock,addr):
         data = clientsock.recv(BUFF)
         if data: 
             print repr(addr) + ' recv:' + repr(data)
-            #clientsock.send(response(data))
-            #print repr(addr) + ' sent:' + repr(response(data))
             
             #*****************************************************************************
             # REGISTER  
@@ -207,49 +204,35 @@ class TicTacToeServer:
 if __name__=='__main__':
     server = TicTacToeServer()
     server.start()
+    
+    
+    
 
-    
-    
-    
-    
-    
-    
-    
-    
-    
-#    
-#    
-#    
-#    
-#    
-#if self.data.startswith("REGISTER"):
-#            player_id = self.data.split(' ')[1]
-#            player_ip = self.client_address[0]
-#            self.waiting_players.append((player_id, player_ip))
-#            print "REGISTER %s" % (player_id)
-#            print "Total players: %i" % (len(self.waiting_players))
-#        elif self.data.startswith("FIND_GAME"):
-#            player_id = self.data.split(' ')[1]
-#            player_ip = self.client_address[0]
-#            print "FIND_GAME %s" % (player_id)
-#            
-#            if self.player2[0] == player_id:
-#               self.request.sendall("%s %s%s" % (MSG_RIVAL, self.player1[0], END_CHAR)) 
-#            
-#            elif len(self.waiting_players) > 2:                
-#                turn = random.random()
-#                if turn < 0.50:
-#                    self.player1 = (player_id, player_ip)
-#                    # Find the second player
-#                    for player in self.waiting_players:
-#                        if player[0] != player_id:
-#                            self.player2 = player
-#                            break
-#                        
-#                    # Remove assigned players
-#                    self.waiting_players.remove(self.player1)
-#                    self.waiting_players.remove(self.player2)
-#                    self.request.sendall("%s %s%s" % (MSG_RIVAL, self.player2[0], END_CHAR)) 
-#                                    
-#            else:
-#                self.request.sendall(MSG_WAITING_PLAYERS + END_CHAR)
+#sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+#sock.connect((HOST, PORT))
+#sock.sendall("REGISTER 1 \n")
+#sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+#sock.connect((HOST, PORT))
+#sock.sendall("REGISTER 2 \n")
+#sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+#sock.connect((HOST, PORT))
+#sock.sendall("FIND_GAME 1 \n")
+#sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+#sock.connect((HOST, PORT))
+#sock.sendall("FIND_GAME 2 \n")
+#sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+#sock.connect((HOST, PORT))
+#sock.sendall("DO_MOVE 1 4 \n")
+#sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+#sock.connect((HOST, PORT))
+#sock.sendall("GET_MOVE 2 \n")
+#sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+#sock.connect((HOST, PORT))
+#sock.sendall("DO_MOVE 2 5 \n")
+#sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+#sock.connect((HOST, PORT))
+#sock.sendall("GET_MOVE 1 \n")
+#
+#sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+#sock.connect((HOST, PORT))
+#sock.sendall("DO_MOVE 2 5 \n")
