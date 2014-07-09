@@ -322,11 +322,26 @@ void findPlayer(){
 }
 
 int getMove(){
-  //TODO
-  // move = send ("GET_MOVE " + rival_id)
-  // GET_MOVE ####
-  // # -> a number between 0 and 8
-  return 0;
+  Serial.println("Getting rival's move...");
+  boolean notMove = true;
+  int rivalMove = -1;
+  
+  while(notFound){
+    String res = sendAndWait(MSG_GET_MOVE + player_id + END_CHAR);
+    String command = getCommand(res);
+    
+    //if wait_for_move -> delay 1000
+    //if rival_move -> notFound = false, rival_move = res 2
+    if (command == CMD_WAIT_FOR_MOVE){
+      Serial.println("Waiting for rival's move...");
+      delay(1000);
+    } else if (command == CMD_RIVAL_MOVE){
+      String parameters = getParameters(res);
+      rivalMove = getParameter(parameters, 2);      
+      notFound = false;
+    }    
+    
+  return rivalMove;
 }
 
 void sendMove(int player_move){
@@ -336,7 +351,7 @@ void sendMove(int player_move){
   //If ack -> notReceived = false
   //If wait_for_rival -> delay 1000
   while(notReceived){}
-    String res = sendAndWait(MSG_REGISTER + player_id + player_move +  END_CHAR);
+    String res = sendAndWait(MSG_DO_MOVE + player_id + player_move +  END_CHAR);
     String command = getCommand(res);
     if (command = CMD_ACK){
       Serial.println("Sent");
