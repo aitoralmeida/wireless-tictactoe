@@ -326,7 +326,7 @@ int getMove(){
   boolean notMove = true;
   int rivalMove = -1;
   
-  while(notFound){
+  while(notMove){
     String res = sendAndWait(MSG_GET_MOVE + player_id + END_CHAR);
     String command = getCommand(res);
     
@@ -337,9 +337,11 @@ int getMove(){
       delay(1000);
     } else if (command == CMD_RIVAL_MOVE){
       String parameters = getParameters(res);
-      rivalMove = getParameter(parameters, 2);      
-      notFound = false;
+      String strMove = getParameter(parameters, 2);      
+      rivalMove = strMove.toInt();
+      notMove = false;
     }    
+  }
     
   return rivalMove;
 }
