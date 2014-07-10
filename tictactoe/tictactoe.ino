@@ -164,17 +164,9 @@ void loop() {
     printMsg("Wait for your rival's move.");
     
     // 1- Check rival move, wait until it happens
-    waitForMove = true;
     int rival_move = -1;
-    while(waitForMove){
-      rival_move = getMove();
-      // Wait and check again
-      if (rival_move < 0){
-        delay(100);
-      } else{
-        waitForMove = false;    
-      }
-    }  
+    rival_move = getMove();
+      
     // 2- Update color status
     if (rival_move > -1 && rival_move  < 9){
       redStatus[rival_move] = 1;
