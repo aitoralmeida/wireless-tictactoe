@@ -185,7 +185,7 @@ class TicTacToeServer:
                 
 
     
-        clientsock.close()
+        #clientsock.close()
         print addr, "- closed connection" #log on console
         
     def start(self):
