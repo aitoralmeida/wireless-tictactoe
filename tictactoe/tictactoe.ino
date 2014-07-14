@@ -10,12 +10,12 @@
 #define DISPLAY_ADDRESS  0x51
 #define BUTTONS_CHANGE   43
 #define SM125_ADDRESS 0x46
-// Sound addresses
-#define WELCOME 0x5 //Welcome screen
-#define YOU_WIN 0x1 //The Player wins
-#define YOU_LOSE 0x2 //The Rival wins
-#define VICTORY_LOOP 0x3 //Victory loop!!!
-#define NO_NO 0x4 //Illegal move
+// Sound files
+#define WELCOME 0x1 //Welcome screen
+#define YOU_WIN 0x2 //The Player wins :-)
+#define YOU_LOSE 0x3 //The Rival wins :-(
+#define VICTORY_LOOP 0x4 //Victory loop!!!
+#define NO_NO 0x5 //Illegal move
 
 // Communication msgs
 String MSG_REGISTER = "REGISTER"; // id
