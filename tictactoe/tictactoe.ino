@@ -23,7 +23,8 @@ String MSG_FIND_GAME = "FIND_GAME"; // id
 String MSG_DO_MOVE =  "DO_MOVE"; // id movement(0..8)
 String MSG_GET_MOVE = "GET_MOVE"; // id
 String END_CHAR = "\0d"; 
-String SEP_CHAR = ",";
+String SEP_CHAR_COMMANDS = " ";
+String SEP_CHAR_PARAMETERS = ",";
 // Server commands
 String CMD_WAITING_PLAYERS = "WAITING_FOR_PLAYERS";
 String CMD_RIVAL = "RIVAL"; // rival_id turn(0/1)
@@ -285,14 +286,14 @@ void printMsg(String msg){
  
 void registerPlayer(){
   Serial.println("Registering player...");
-  sendMsg(MSG_REGISTER + SEP_CHAR + player_id + END_CHAR);
+  sendMsg(MSG_REGISTER + SEP_CHAR_COMMANDS + player_id + END_CHAR);
 }
 
 void findPlayer(){
   Serial.println("Finding other player...");
   boolean notFound = true;
   while(notFound){
-    String res = sendAndWait(MSG_FIND_GAME + SEP_CHAR  + player_id + END_CHAR);
+    String res = sendAndWait(MSG_FIND_GAME + SEP_CHAR_COMMANDS  + player_id + END_CHAR);
     String command = getCommand(res);
     
     // if waiting_for_player -> delay 100
@@ -320,7 +321,7 @@ int getMove(){
   int rivalMove = -1;
   
   while(notMove){
-    String res = sendAndWait(MSG_GET_MOVE + SEP_CHAR + player_id + END_CHAR);
+    String res = sendAndWait(MSG_GET_MOVE + SEP_CHAR_COMMANDS + player_id + END_CHAR);
     String command = getCommand(res);
     
     //if wait_for_move -> delay 1000
@@ -346,7 +347,7 @@ void sendMove(int player_move){
   //If ack -> notReceived = false
   //If wait_for_rival -> delay 1000
   while(notReceived){}
-    String res = sendAndWait(MSG_DO_MOVE + SEP_CHAR + player_id + SEP_CHAR  + player_move +  END_CHAR);
+    String res = sendAndWait(MSG_DO_MOVE + SEP_CHAR_COMMANDS + player_id + SEP_CHAR_PARAMETERS  + player_move +  END_CHAR);
     String command = getCommand(res);
     if (command = CMD_ACK){
       Serial.println("Sent");
