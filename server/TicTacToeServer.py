@@ -16,7 +16,8 @@ BUFF = 1024
 #* Protocol messages *
 #*********************
 END_CHAR = '\0d'
-SEP_CHAR = ','
+SEP_CHAR_COMMANDS = ' '
+SEP_CHAR_PARAMETERS = ','
 # Client commands
 CMD_REGISTER = "REGISTER" # id
 CMD_FIND_GAME = "FIND_GAME" # id
@@ -53,7 +54,7 @@ class TicTacToeServer:
             #*****************************************************************************
             if data.startswith(CMD_REGISTER):
                 #REGISTER ID
-                player_id = data.split(SEP_CHAR)[1]
+                player_id = data.split(SEP_CHAR_COMMANDS)[1]
                 self.waiting_players.append(player_id)
                 print "REGISTER %s" % (player_id)
                 print "Total players: %i" % (len(self.waiting_players))
@@ -63,19 +64,19 @@ class TicTacToeServer:
             #*****************************************************************************
             elif data.startswith(CMD_FIND_GAME):
                 #FIND_GAME ID
-                print data.split(SEP_CHAR)
-                player_id = data.split(SEP_CHAR)[1]
+                print data.split(SEP_CHAR_COMMANDS)
+                player_id = data.split(SEP_CHAR_COMMANDS)[1]
                 print "FIND_GAME %s" % (player_id)
 
                 if self.player2 == player_id: # When doing it randomly it will not be player2
                     print "Turn already assigned."
                     # Tell player1 that he is the second to move and who his rival is
-                    clientsock.send("%s%s%s%s%i%s" % (MSG_RIVAL, SEP_CHAR, self.player1, SEP_CHAR, 1, END_CHAR))
+                    clientsock.send("%s%s%s%s%i%s" % (MSG_RIVAL, SEP_CHAR_COMMANDS, self.player1, SEP_CHAR_PARAMETERS, 1, END_CHAR))
                     
                 elif self.player1 == player_id: # When doing it randomly it will not be player1
                     print "Turn already assigned."                    
                     # Tell player1 that he is the first to move and who his rival is
-                    clientsock.send("%s%s%s%s%i%s" % (MSG_RIVAL, SEP_CHAR, self.player2, SEP_CHAR, 0, END_CHAR)) 
+                    clientsock.send("%s%s%s%s%i%s" % (MSG_RIVAL, SEP_CHAR_COMMANDS, self.player2, SEP_CHAR_PARAMETERS, 0, END_CHAR)) 
                     
                     
                 elif player_id not in self.waiting_players:
@@ -97,7 +98,7 @@ class TicTacToeServer:
                     # Remove assigned players
                     self.waiting_players.remove(self.player1)
                     self.waiting_players.remove(self.player2)
-                    clientsock.send("%s%s%s%s%i%s" % (MSG_RIVAL, SEP_CHAR, self.player2, SEP_CHAR, 0, END_CHAR))                                     
+                    clientsock.send("%s%s%s%s%i%s" % (MSG_RIVAL, SEP_CHAR_COMMANDS, self.player2, SEP_CHAR_PARAMETERS, 0, END_CHAR))                                     
                 else:
                     print "Wait for players."
                     clientsock.send(MSG_WAITING_PLAYERS + END_CHAR)
@@ -108,8 +109,8 @@ class TicTacToeServer:
             elif data.startswith(CMD_DO_MOVE):
                 # DO_MOVE id movement
                 
-                player_id = data.split(SEP_CHAR)[1]
-                move = data.split(SEP_CHAR)[2]
+                player_id = data.split(SEP_CHAR_COMMANDS)[1].split(SEP_CHAR_PARAMETERS)[0]
+                move = data.split(SEP_CHAR_COMMANDS)[1].split(SEP_CHAR_PARAMETERS)[1]
                 print 'Player:', player_id
                 print 'Move:', move
             
@@ -154,7 +155,7 @@ class TicTacToeServer:
             #*****************************************************************************
             elif data.startswith(CMD_GET_MOVE):
                 # GET_MOVE id
-                player_id = data.split(SEP_CHAR)[1]  
+                player_id = data.split(SEP_CHAR_COMMANDS)[1]  
                 
                 print 'Pre get_move'
                 print '-Turn:', self.current_turn
@@ -167,7 +168,7 @@ class TicTacToeServer:
                         clientsock.send(MSG_WAIT_FOR_MOVE + END_CHAR)
                     else:
                         print "Sending player 1 move to player 2: ", self.player1_move
-                        clientsock.send(MSG_RIVAL_MOVE + SEP_CHAR + self.player1 + SEP_CHAR + self.player1_move + END_CHAR)
+                        clientsock.send(MSG_RIVAL_MOVE + SEP_CHAR_COMMANDS + self.player1 + SEP_CHAR_PARAMETERS + self.player1_move + END_CHAR)
                         self.player1_move = ''
                         
                 elif self.player2 != player_id:
@@ -176,7 +177,7 @@ class TicTacToeServer:
                         clientsock.send(MSG_WAIT_FOR_MOVE + END_CHAR)
                     else:
                         print "Sending player 2 move to player 1:", self.player2_move
-                        clientsock.send(MSG_RIVAL_MOVE + SEP_CHAR + self.player2 + SEP_CHAR + self.player2_move + END_CHAR)
+                        clientsock.send(MSG_RIVAL_MOVE + SEP_CHAR_COMMANDS + self.player2 + SEP_CHAR_PARAMETERS + self.player2_move + END_CHAR)
                         self.player2_move = ''
                 
                 print 'Post get_move'
