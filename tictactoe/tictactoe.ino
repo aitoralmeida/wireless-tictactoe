@@ -21,7 +21,7 @@
 #define YOU_WIN 0x2 //The Player wins :-)
 #define YOU_LOSE 0x3 //The Rival wins :-(
 #define VICTORY_LOOP 0x4 //Victory loop!!!
-#define NO_NO 0x5 //Illegal move
+#define NO_NO 0x7 //Illegal move
 // Image addresses
 #define GAME_OVER 0x0049
 #define WINNER 0x00DB
