@@ -6,6 +6,12 @@
 #include <SM125.h> //RFID
 #include <SoundPlayer.h>
 
+//Game ID
+#define GAME_ID 0x01 //tictactoe
+//Board ID
+#define BOARD_ID 0x01 //TODO: Change it for each board
+
+
 // Hardware addresses
 #define DISPLAY_ADDRESS  0x51
 #define BUTTONS_CHANGE   43
@@ -16,6 +22,11 @@
 #define YOU_LOSE 0x3 //The Rival wins :-(
 #define VICTORY_LOOP 0x4 //Victory loop!!!
 #define NO_NO 0x5 //Illegal move
+// Image addresses
+#define GAME_OVER 0x0049
+#define WINNER 0x00DB
+#define TICTACTOE 0x0092
+#define DOWN_OFFSET 11 // How many pixels we are leaving for the status bar
 
 // Communication msgs
 String MSG_REGISTER = "REGISTER"; // id
@@ -153,7 +164,8 @@ void loop() {
     // 3 -Check victory conditions
     greenVictory = checkWin(greenStatus);
     if (greenVictory){
-      printMsg("A winner is you"); //TODO think some proper msgs
+      //printMsg("A winner is you");
+      display.drawImage(0x0000, WINNER, 0, DOWN_OFFSET); 
       soundPlayer.play(YOU_WIN);
       victoryLoop('g');
     }
@@ -178,8 +190,9 @@ void loop() {
     // 3 -Check victory conditions
     redVictory = checkWin(redStatus);
     if (redVictory){
-      printMsg("You lose!");
-     soundPlayer.play(YOU_LOSE); 
+      //printMsg("You lose!");
+      display.drawImage(0x0000, GAME_OVER, 0, DOWN_OFFSET); 
+      soundPlayer.play(YOU_LOSE); 
       victoryLoop('r');
     }
   }
@@ -190,9 +203,17 @@ void loop() {
  **********************************************/
  
 void initializeHardwarePeripherals(){
+  initializeScreen();
+  display.printText("Initializing...", 6, 1, GREEN);
   initializeRFID();
   initializeSoundPlayer();
-  initializeScreen();
+  initializeBoard();
+}
+
+void initializeBoard(){
+  // TODO program it once the protocol is defined in the board
+  // Send game ID
+  // Send board ID
 }
 
 void initializeRFID(){
@@ -233,15 +254,18 @@ void initializeScreen(){
 /**********************************************
  *   SCREEN PRONTS
  **********************************************/
+ 
+
 
 void doWelcome(){
   display.clear();
   soundPlayer.stop();
-  display.printText("Welcome to the tictactoe game!", 6, 1, BLUE);
+  //display.printText("Welcome to the tictactoe game!", 6, 1, BLUE);
+  display.drawImage(0x0000, TICTACTOE, 0, DOWN_OFFSET);
   soundPlayer.play(WELCOME);
   delay(1000);
   display.clear();
-  display.printText("Press green button to find another player...", 6, 1, GREEN);
+  display.printText("Press the green button to find another player...", 6, 1, GREEN);
   boolean doLoop = true;
   while(doLoop){
     if (display.buttonsChanged()) {
