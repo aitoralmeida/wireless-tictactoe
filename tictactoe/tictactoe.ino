@@ -204,7 +204,6 @@ void loop() {
     }
 
     // 2- Send move to server  
-    Serial.println("Sending move...");
     sendMove(player_move);
 
     // 3 -Check victory conditions
@@ -464,17 +463,21 @@ void sendMove(int player_move){
 
   //If ack -> notReceived = false
   //If wait_for_rival -> delay 1000
-  while(notReceived){
-    String res = sendAndWait(MSG_DO_MOVE + SEP_CHAR_COMMANDS + player_id + SEP_CHAR_PARAMETERS  + player_move +  END_CHAR);
-    String command = getCommand(res);
+  String res = sendAndWait(MSG_DO_MOVE + SEP_CHAR_COMMANDS + player_id + SEP_CHAR_PARAMETERS  + player_move +  END_CHAR);
+  String command = getCommand(res);
+  while(notReceived){    
     if (command.startsWith(CMD_ACK)){
       Serial.println("Sent");
       notReceived = false;
     } 
-    else if (command.startsWith(CMD_WAIT_FOR_RIVAL)){
+    else if (command.startsWith(CMD_WAIT_FOR_RIVAL) && command.startsWith(CMD_WAIT_FOR_TURN)){
       Serial.println("Waiting for the rival to retrieve previous move...");
       delay(1000);
-    }  
+      res = sendAndWait(MSG_DO_MOVE + SEP_CHAR_COMMANDS + player_id + SEP_CHAR_PARAMETERS  + player_move +  END_CHAR);
+      command = getCommand(res);
+    } else {
+      Serial.println("Unknown command");
+    } 
   }
 }
 
