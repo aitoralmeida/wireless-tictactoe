@@ -117,14 +117,15 @@ boolean redVictory = false;
 boolean greenVictory = false;
 
 // hardware initialization
-void setup() {  
-  Serial.begin(9600);
+void setup() {
+  // 0 - Initialize serial comms  
+  Serial.begin(9600); // USB comm for debugging purposes
+  Serial1.begin(9600); // Comm with the base board
+  
   Serial.println("*****************");
   Serial.println("***** Setup *****");
   Serial.println("*****************");
-  // 0 - Initialize board comm
-  Serial.println("Initializing board comm...");
-  Serial1.begin(9600);
+  
   // 1 - Initialize the tictactoe board
   Serial.println("Initializing tictactoe squares...");
   for (int i = 0; i < 9; i++){
@@ -155,6 +156,8 @@ void loop() {
   Serial.println("*********************");
   Serial.println("***** Game Loop *****");
   Serial.println("*********************");
+  Serial.println("-Turn: " + String(turn));
+  Serial.println("-Start turn: " + start_turn);
   Serial.println("");
   delay(200);
   boolean waitForMove = true;
@@ -255,11 +258,11 @@ void loop() {
 
 void initializeHardwarePeripherals(){
   Serial.println("Initializing hardware:");
+  initializeBoard();
   initializeScreen();
   display.printText("Initializing...", 6, 1, GREEN);
   initializeRFID();
-  initializeSoundPlayer();
-  initializeBoard();
+  initializeSoundPlayer();  
 }
 
 void initializeBoard(){
@@ -400,26 +403,31 @@ void findPlayer(){
   Serial.println("Finding other player...");
   boolean notFound = true;
   while(notFound){
+    Serial.println("-Searching for other players...");
     String res = sendAndWait(MSG_FIND_GAME + SEP_CHAR_COMMANDS  + player_id + END_CHAR);
+    Serial.println("-reply: '" + res + "'");
     String command = getCommand(res);
 
     // if waiting_for_player -> delay 100
     // if not_registered -> register
     // if rival -> set start_turn, set rival_id, notFound = false
-    if (command == CMD_WAIT_FOR_RIVAL){
+    if (command.startsWith(CMD_WAITING_PLAYERS)){
       Serial.println("-Waiting for rivals...");
       delay(1000);
     } 
-    else if (command == CMD_NOT_REGISTERED){ // This shouldn't happen
+    else if (command.startsWith(CMD_NOT_REGISTERED)){ // This shouldn't happen
       Serial.println("-Not registered");
       registerPlayer();
     } 
-    else if (command == CMD_RIVAL){
+    else if (command.startsWith(CMD_RIVAL)){
       Serial.println("-Rival found");
       String parameters = getParameters(res);
       rival_id = getParameter(parameters, 1);
       start_turn = getParameter(parameters, 2);
       notFound = false;
+    } else{
+      Serial.println("Unknown command: '" + command + "'");
+    
     }
   }
 }
@@ -435,11 +443,11 @@ int getMove(){
 
     //if wait_for_move -> delay 1000
     //if rival_move -> notFound = false, rival_move = res 2
-    if (command == CMD_WAIT_FOR_MOVE){
+    if (command.startsWith(CMD_WAIT_FOR_MOVE)){
       Serial.println("Waiting for rival's move...");
       delay(1000);
     } 
-    else if (command == CMD_RIVAL_MOVE){
+    else if (command.startsWith(CMD_RIVAL_MOVE)){
       String parameters = getParameters(res);
       String strMove = getParameter(parameters, 2);      
       rivalMove = strMove.toInt();
@@ -460,11 +468,11 @@ void sendMove(int player_move){
   }
   String res = sendAndWait(MSG_DO_MOVE + SEP_CHAR_COMMANDS + player_id + SEP_CHAR_PARAMETERS  + player_move +  END_CHAR);
   String command = getCommand(res);
-  if (command = CMD_ACK){
+  if (command.startsWith(CMD_ACK)){
     Serial.println("Sent");
     notReceived = false;
   } 
-  else if (command == CMD_WAIT_FOR_RIVAL){
+  else if (command.startsWith(CMD_WAIT_FOR_RIVAL)){
     Serial.println("Waiting for the rival to retrieve previous move...");
     delay(1000);
   }  
