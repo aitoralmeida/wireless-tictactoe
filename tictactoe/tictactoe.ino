@@ -162,7 +162,7 @@ void loop() {
   delay(200);
   boolean waitForMove = true;
 
-  if ((turn > 0) || (turn == 0 && start_turn.equals("0"))){
+  if ((turn > 0) || (turn == 0 && start_turn.startsWith("0"))){
     // ************************************************************************
     // ******** Player turn ***************************************************
     // ************************************************************************
@@ -219,7 +219,7 @@ void loop() {
     }
   }
 
-  if ((turn > 0) || (turn == 0 && start_turn.equals("1"))){
+  if ((turn > 0) || (turn == 0 && start_turn.startsWith("1"))){
     // ************************************************************************
     // ******* Rival turn *****************************************************
     // ************************************************************************
@@ -502,15 +502,16 @@ String sendAndWait(String msg){
 // The calibration changes from sensor to sensor
 // The values are unique for each board and sensor
 void calibrateSensors(){
-  squares[0]->calibrateCNY70(460, 400, 360, 280);
-  squares[1]->calibrateCNY70(240, 150, 145, 60);
-  squares[2]->calibrateCNY70(290, 200, 150, 60);
-  squares[3]->calibrateCNY70(420, 370, 260, 200);
-  squares[4]->calibrateCNY70(260, 210, 160, 90);
-  squares[5]->calibrateCNY70(380, 320, 230, 170);
-  squares[6]->calibrateCNY70(350, 300, 230, 170);
-  squares[7]->calibrateCNY70(480, 430, 380, 300);
-  squares[8]->calibrateCNY70(340, 290, 230, 170);  
+  // int maxGreen, int minGreen, int maxRed, int minRed
+  squares[0]->calibrateCNY70(310, 270, 350, 320);
+  squares[1]->calibrateCNY70(440, 415, 480, 460);
+  squares[2]->calibrateCNY70(240, 220, 335, 310);
+  squares[3]->calibrateCNY70(325, 250, 375, 340);
+  squares[4]->calibrateCNY70(420, 380, 460, 435);
+  squares[5]->calibrateCNY70(200, 140, 250, 205);
+  squares[6]->calibrateCNY70(320, 280, 370, 330);
+  squares[7]->calibrateCNY70(240, 190, 310, 250);
+  squares[8]->calibrateCNY70(220, 170, 270, 245);  
 }
 
 
