@@ -465,17 +465,17 @@ void sendMove(int player_move){
   //If ack -> notReceived = false
   //If wait_for_rival -> delay 1000
   while(notReceived){
+    String res = sendAndWait(MSG_DO_MOVE + SEP_CHAR_COMMANDS + player_id + SEP_CHAR_PARAMETERS  + player_move +  END_CHAR);
+    String command = getCommand(res);
+    if (command.startsWith(CMD_ACK)){
+      Serial.println("Sent");
+      notReceived = false;
+    } 
+    else if (command.startsWith(CMD_WAIT_FOR_RIVAL)){
+      Serial.println("Waiting for the rival to retrieve previous move...");
+      delay(1000);
+    }  
   }
-  String res = sendAndWait(MSG_DO_MOVE + SEP_CHAR_COMMANDS + player_id + SEP_CHAR_PARAMETERS  + player_move +  END_CHAR);
-  String command = getCommand(res);
-  if (command.startsWith(CMD_ACK)){
-    Serial.println("Sent");
-    notReceived = false;
-  } 
-  else if (command.startsWith(CMD_WAIT_FOR_RIVAL)){
-    Serial.println("Waiting for the rival to retrieve previous move...");
-    delay(1000);
-  }  
 }
 
 void sendMsg(String msg){
