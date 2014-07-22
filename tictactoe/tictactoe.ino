@@ -119,10 +119,14 @@ boolean greenVictory = false;
 // hardware initialization
 void setup() {  
   Serial.begin(9600);
-  Serial.println("Setup...");
+  Serial.println("*****************");
+  Serial.println("***** Setup *****");
+  Serial.println("*****************");
   // 0 - Initialize board comm
+  Serial.println("Initializing board comm...");
   Serial1.begin(9600);
   // 1 - Initialize the tictactoe board
+  Serial.println("Initializing tictactoe squares...");
   for (int i = 0; i < 9; i++){
     squares[i] = new Square(8 - i, i + 1, &_sd);
   }
@@ -131,18 +135,27 @@ void setup() {
   allGreen();
   delay(1000);
   clearSquares();
+  Serial.println("");
   // 2 - Initialize the baseboard peripherals 
   initializeHardwarePeripherals();
+  Serial.println("");
   // 3 - Show the welcome message
-  doWelcome();  
+  doWelcome();
+  Serial.println("");  
   // 4 - Register the player in the server
   registerPlayer();
+  Serial.println("");
   // 5 - Find other player
   display.printText("Waiting for players...", 6, 1, GREEN);
   findPlayer();
+  Serial.println("");
 }
 
 void loop() {
+  Serial.println("*********************");
+  Serial.println("***** Game Loop *****");
+  Serial.println("*********************");
+  Serial.println("");
   delay(200);
   boolean waitForMove = true;
 
@@ -150,6 +163,7 @@ void loop() {
     // ************************************************************************
     // ******** Player turn ***************************************************
     // ************************************************************************
+    Serial.println("***** Player turn *****");
     for (int i = 0; i < 9; i++){
       previousGreenStatus[i] = greenStatus[i];
     }
@@ -158,7 +172,8 @@ void loop() {
     printMsg("Your turn.");
 
     int player_move = 0;
-
+    
+    Serial.println("Waiting for move...");
     while (waitForMove){
       updateBoardStatus();  
       player_move = checkPlayerMove();
@@ -169,25 +184,31 @@ void loop() {
       else if (player_move > -1){
         // Legal move, continue
         waitForMove = false;
+        Serial.println("Legal move.");
       } 
       else if (player_move == -2){
         // Player has moved 2 pieces, illegal move      
-        msgAndWait("You moved two pieces! Correct you move.");
+        msgAndWait("You moved two pieces!");
+        Serial.println("Illegal Move: Moved two pieces.");
         soundPlayer.play(NO_NO);      
       } 
       else if (player_move == -3){
         // Player has moved the piece into an square already used.     
-        msgAndWait("You moved your piece into an already used square! Correct you move.");
+        msgAndWait("You moved your piece into an already used square!");
+        Serial.println("Illegal move: moved into an already used square.");
         soundPlayer.play(NO_NO);  
       }
     }
 
     // 2- Send move to server  
+    Serial.println("Sending move...");
     sendMove(player_move);
 
     // 3 -Check victory conditions
+    Serial.println("Check win conditions.");
     greenVictory = checkWin(greenStatus);
     if (greenVictory){
+      Serial.println("The Player wins.");
       //printMsg("A winner is you");
       display.drawImage(0x0000, WINNER, 0, DOWN_OFFSET); 
       soundPlayer.play(YOU_WIN);
@@ -199,21 +220,27 @@ void loop() {
     // ************************************************************************
     // ******* Rival turn *****************************************************
     // ************************************************************************
+    Serial.println("***** Rival turn *****");
     printMsg("Wait for your rival's move.");
 
     // 1- Check rival move, wait until it happens
+    Serial.println("Getting Rival's move...");
+    Serial.println("");
     int rival_move = -1;
     rival_move = getMove();
 
     // 2- Update color status
+    Serial.println("Updating color status...");
     if (rival_move > -1 && rival_move  < 9){
       redStatus[rival_move] = 1;
       squares[rival_move]->setRed();
     }
 
     // 3 -Check victory conditions
+    Serial.println("Checking win contitions...");
     redVictory = checkWin(redStatus);
     if (redVictory){
+      Serial.println("The Rival wins.");
       //printMsg("You lose!");
       display.drawImage(0x0000, GAME_OVER, 0, DOWN_OFFSET); 
       soundPlayer.play(YOU_LOSE); 
@@ -227,6 +254,7 @@ void loop() {
  **********************************************/
 
 void initializeHardwarePeripherals(){
+  Serial.println("Initializing hardware:");
   initializeScreen();
   display.printText("Initializing...", 6, 1, GREEN);
   initializeRFID();
@@ -235,6 +263,7 @@ void initializeHardwarePeripherals(){
 }
 
 void initializeBoard(){
+  Serial.println("-Initializing board...");
   boolean waitToBoard = true;
   String msg = "";
   while (waitToBoard){
@@ -246,17 +275,17 @@ void initializeBoard(){
 
     int index = msg.indexOf(END_CHAR);
     if (index != -1){
-      Serial.println("Received: " + msg);
+      Serial.println("--Received: " + msg);
       String command = getCommand(msg);
       Serial.println("Command: '" + command + "'");
-      if (command.startsWith("GET_GAMEID")){ //TODO comprobar que no se puede == //TODO pasar arriba string
+      if (command.startsWith("GET_GAMEID")){  //TODO pasar arriba string
         String reply = "GAMEID " + String(GAME_ID) + END_CHAR;
-        Serial.println("Sending: '" + reply + "'");
+        Serial.println("--Sending: '" + reply + "'");
         Serial1.print(reply);
       }
       else if (command.startsWith("PLAY")){
         String reply = "OK" + END_CHAR;
-        Serial.println("Sending: " + reply);
+        Serial.println("--Sending: " + reply);
         Serial1.print(reply);
         waitToBoard = false;
       } 
@@ -266,21 +295,24 @@ void initializeBoard(){
 }
 
 void initializeRFID(){
+  Serial.println("-Initializing RFID...");
   sm125.begin(SM125_ADDRESS);
 }
 
 void initializeSoundPlayer(){
+  Serial.println("-Initializing sound player...");
   soundPlayer.begin(0x61);
   int ver = soundPlayer.getVersion();  
   switch(ver)
   {
   case 0x10:
-    Serial.println("Version: 1.0)");
+    Serial.println("--Version: 1.0");
     break;
   }
 }
 
 void initializeScreen(){
+  Serial.println("-Initializing screen...");
   pinMode(BUTTONS_CHANGE, INPUT);
   display.begin(DISPLAY_ADDRESS, BUTTONS_CHANGE);
   //wait for display initialization
@@ -293,7 +325,7 @@ void initializeScreen(){
   switch(ver)
   {
   case 0x10:
-    Serial.println("Version 1.0");
+    Serial.println("--Version 1.0");
     break;
   }
 
@@ -307,6 +339,7 @@ void initializeScreen(){
 
 
 void doWelcome(){
+  Serial.println("***** doWelcome *****");
   display.clear();
   soundPlayer.stop();
   //display.printText("Welcome to the tictactoe game!", 6, 1, BLUE);
@@ -328,6 +361,7 @@ void doWelcome(){
   }
   display.clear();
   display.printText("Starting a new game!", 6, 1, GREEN);
+  Serial.println("Starting new game");
   delay(300); 
 
 }
@@ -373,15 +407,15 @@ void findPlayer(){
     // if not_registered -> register
     // if rival -> set start_turn, set rival_id, notFound = false
     if (command == CMD_WAIT_FOR_RIVAL){
-      Serial.println("Waiting for rivals...");
+      Serial.println("-Waiting for rivals...");
       delay(1000);
     } 
     else if (command == CMD_NOT_REGISTERED){ // This shouldn't happen
-      Serial.println("Not registered");
+      Serial.println("-Not registered");
       registerPlayer();
     } 
     else if (command == CMD_RIVAL){
-      Serial.println("Rival found");
+      Serial.println("-Rival found");
       String parameters = getParameters(res);
       rival_id = getParameter(parameters, 1);
       start_turn = getParameter(parameters, 2);
