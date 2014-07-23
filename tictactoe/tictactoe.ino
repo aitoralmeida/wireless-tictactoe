@@ -160,6 +160,7 @@ void setup() {
   registerPlayer();
   Serial.println("");
   // 5 - Find other player
+  display.clear();
   display.printText("Waiting for players...", 6, 1, GREEN);
   findPlayer();
   Serial.println("");
@@ -175,7 +176,7 @@ void loop() {
   delay(200);
   boolean waitForMove = true;
 
-  if ((turn > 0) || (turn == 0 && start_turn.startsWith("0"))){
+  if ((turn > 0) || (turn == 0 && start_turn.startsWith("YES"))){
     // ************************************************************************
     // ******** Player turn ***************************************************
     // ************************************************************************
@@ -231,7 +232,7 @@ void loop() {
     }
   }
 
-  if ((turn > 0) || (turn == 0 && start_turn.startsWith("1"))){
+  if ((turn > 0) || (turn == 0 && start_turn.startsWith("NO"))){
     // ************************************************************************
     // ******* Rival turn *****************************************************
     // ************************************************************************
@@ -485,7 +486,7 @@ void sendMove(int player_move){
       Serial.println("Sent");
       notReceived = false;
     } 
-    else if (command.startsWith(CMD_WAIT_FOR_RIVAL) && command.startsWith(CMD_WAIT_FOR_TURN)){
+    else if (command.startsWith(CMD_WAIT_FOR_RIVAL) || command.startsWith(CMD_WAIT_FOR_TURN)){
       Serial.println("Waiting for the rival to retrieve previous move...");
       delay(1000);
       res = sendAndWait(MSG_DO_MOVE + SEP_CHAR_COMMANDS + player_id + SEP_CHAR_PARAMETERS  + player_move +  END_CHAR);

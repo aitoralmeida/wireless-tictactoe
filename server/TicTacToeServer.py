@@ -59,7 +59,12 @@ class TicTacToeServer:
             data = clientsock.recv(BUFF)
             if data: 
                 print repr(addr) + ' recv:' + repr(data)
+                
+                #*****************************************************************************                
+                #*****************************************************************************
                 # BOARD INITIALIZATION COMMANDS
+                #*****************************************************************************
+                #*****************************************************************************
                 
                 if data.startswith(CMD_ADD):
                     # TODO do something with the id
@@ -79,8 +84,11 @@ class TicTacToeServer:
                     # TODO do something with the id
                     clientsock.send(MSG_OK + END_CHAR)
                 
-                    
+                #*****************************************************************************
+                #*****************************************************************************
                 # GAME COMMANDS
+                #*****************************************************************************
+                #*****************************************************************************
                 
                 #*****************************************************************************
                 # REGISTER  
@@ -104,12 +112,12 @@ class TicTacToeServer:
                     if self.player2 == player_id: # When doing it randomly it will not be player2
                         print "Turn already assigned."
                         # Tell player1 that he is the second to move and who his rival is
-                        clientsock.send("%s%s%s%s%i%s" % (MSG_RIVAL, SEP_CHAR_COMMANDS, self.player1, SEP_CHAR_PARAMETERS, 1, END_CHAR))
+                        clientsock.send("%s%s%s%s%s%s" % (MSG_RIVAL, SEP_CHAR_COMMANDS, self.player1, SEP_CHAR_PARAMETERS, "NO", END_CHAR))
                         
                     elif self.player1 == player_id: # When doing it randomly it will not be player1
                         print "Turn already assigned."                    
                         # Tell player1 that he is the first to move and who his rival is
-                        clientsock.send("%s%s%s%s%i%s" % (MSG_RIVAL, SEP_CHAR_COMMANDS, self.player2, SEP_CHAR_PARAMETERS, 0, END_CHAR)) 
+                        clientsock.send("%s%s%s%s%s%s" % (MSG_RIVAL, SEP_CHAR_COMMANDS, self.player2, SEP_CHAR_PARAMETERS, "YES", END_CHAR)) 
                         
                         
                     elif player_id not in self.waiting_players:
@@ -131,7 +139,7 @@ class TicTacToeServer:
                         # Remove assigned players
                         self.waiting_players.remove(self.player1)
                         self.waiting_players.remove(self.player2)
-                        clientsock.send("%s%s%s%s%i%s" % (MSG_RIVAL, SEP_CHAR_COMMANDS, self.player2, SEP_CHAR_PARAMETERS, 0, END_CHAR))                                     
+                        clientsock.send("%s%s%s%s%s%s" % (MSG_RIVAL, SEP_CHAR_COMMANDS, self.player2, SEP_CHAR_PARAMETERS, "YES", END_CHAR))                                     
                     else:
                         print "Wait for players."
                         clientsock.send(MSG_WAITING_PLAYERS + END_CHAR)
@@ -144,16 +152,14 @@ class TicTacToeServer:
                     
                     player_id = data.split(SEP_CHAR_COMMANDS)[1].split(SEP_CHAR_PARAMETERS)[0]
                     move = data.split(SEP_CHAR_COMMANDS)[1].split(SEP_CHAR_PARAMETERS)[1]
-                    print 'Player:', player_id
-                    print 'Move:', move
                 
                     print 'Pre move'
                     print '-Turn:', self.current_turn
                     print '-Player 1:', self.player1, self.player1_move
                     print '-Player 2:', self.player2, self.player2_move
                     
-                    if self.current_turn == player_id:
-                        if self.player2 == player_id:
+                    if str(self.current_turn).strip() == str(player_id).strip():
+                        if str(self.player2).strip() == str(player_id).strip():
                             if self.player2_move != '':
                                 print "Previous move not retrieved"
                                 clientsock.send(MSG_WAIT_FOR_RIVAL + END_CHAR)
@@ -161,10 +167,11 @@ class TicTacToeServer:
                                 print "Storing move for player 2"
                                 self.player2_move = move
                                 self.current_turn = self.player1
+                                print "Send ACK"
                                 clientsock.send(MSG_ACK + END_CHAR)
                                 
                                 
-                        elif self.player1 == player_id:
+                        elif str(self.player1).strip() == str(player_id).strip():
                             if self.player1_move != '':
                                 print "Previous move not retrieved"
                                 clientsock.send(MSG_WAIT_FOR_RIVAL + END_CHAR)
@@ -172,6 +179,7 @@ class TicTacToeServer:
                                 print "Storing move for player 1"
                                 self.player1_move = move
                                 self.current_turn = self.player2
+                                print "Send ACK"
                                 clientsock.send(MSG_ACK + END_CHAR)
                         
                         print 'Post move'
@@ -271,3 +279,14 @@ if __name__=='__main__':
 #sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 #sock.connect((HOST, PORT))
 #sock.sendall("DO_MOVE 2 5 \n")
+
+#HOST, PORT = "192.168.2.103", 9999
+#sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+#sock.connect((HOST, PORT))
+#sock.sendall("REGISTER 2000 \n")
+#sock.sendall("FIND_GAME 2 \n")
+
+#sock.sendall("GET_MOVE 2 \n")
+
+#sock.sendall("DO_MOVE 2,5 \n")
+
