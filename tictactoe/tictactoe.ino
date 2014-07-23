@@ -229,6 +229,8 @@ void loop() {
       display.drawImage(0x0000, WINNER, 0, DOWN_OFFSET); 
       soundPlayer.play(YOU_WIN);
       victoryLoop('g');
+    } else{
+      turn = turn + 1;
     }
   }
 
@@ -261,6 +263,8 @@ void loop() {
       display.drawImage(0x0000, GAME_OVER, 0, DOWN_OFFSET); 
       soundPlayer.play(YOU_LOSE); 
       victoryLoop('r');
+    } else{
+      turn = turn + 1;
     }
   }
 }
