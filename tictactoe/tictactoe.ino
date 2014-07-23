@@ -128,14 +128,27 @@ void setup() {
   
   // 1 - Initialize the tictactoe board
   Serial.println("Initializing tictactoe squares...");
+  
   for (int i = 0; i < 9; i++){
     squares[i] = new Square(8 - i, i + 1, &_sd);
   }
+  Serial.println("-Calibrating sensors.");
   calibrateSensors();
+  
+  Serial.println("-Testing squares.");
+  delay(100);
   clearSquares();
+  Serial.println("--Green.");
   allGreen();
-  delay(1000);
+  delay(500);
   clearSquares();
+  Serial.println("--Red.");
+  allRed();
+  delay(500);
+  clearSquares();
+  delay(100);
+  
+  Serial.println("-Squares initialized.");
   Serial.println("");
   // 2 - Initialize the baseboard peripherals 
   initializeHardwarePeripherals();
@@ -262,6 +275,7 @@ void initializeHardwarePeripherals(){
   display.printText("Initializing...", 6, 1, GREEN);
   initializeRFID();
   initializeSoundPlayer();  
+  Serial.println("Hardware initialized");
 }
 
 void initializeBoard(){
@@ -677,6 +691,7 @@ void victoryLoop(char color){
     }
   }
 }
+
 
 void restartGame(){
 
