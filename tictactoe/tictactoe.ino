@@ -201,7 +201,7 @@ void loop() {
       else if (player_move > -1){
         // Legal move, continue
         waitForMove = false;
-        Serial.println("Legal move.");
+        Serial.println("Legal move: " + String(player_move));
       } 
       else if (player_move == -2){
         // Player has moved 2 pieces, illegal move      
@@ -287,6 +287,7 @@ void initializeBoard(){
   Serial.println("-Initializing board...");
   boolean waitToBoard = true;
   String msg = "";
+  Serial.println("--Waiting for board reply...")
   while (waitToBoard){
     delay(100);
     while (Serial1.available()){

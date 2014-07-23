@@ -95,7 +95,7 @@ class TicTacToeServer:
                 #*****************************************************************************
                 elif data.startswith(CMD_REGISTER):
                     #REGISTER ID
-                    player_id = data.split(SEP_CHAR_COMMANDS)[1]
+                    player_id = data.split(SEP_CHAR_COMMANDS)[1].strip()
                     self.waiting_players.append(player_id)
                     print "REGISTER %s" % (player_id)
                     print "Total players: %i" % (len(self.waiting_players))
@@ -106,7 +106,7 @@ class TicTacToeServer:
                 elif data.startswith(CMD_FIND_GAME):
                     #FIND_GAME ID
                     print data.split(SEP_CHAR_COMMANDS)
-                    player_id = data.split(SEP_CHAR_COMMANDS)[1]
+                    player_id = data.split(SEP_CHAR_COMMANDS)[1].strip()
                     print "FIND_GAME %s" % (player_id)
     
                     if self.player2 == player_id: # When doing it randomly it will not be player2
@@ -151,7 +151,7 @@ class TicTacToeServer:
                     # DO_MOVE id movement
                     
                     player_id = data.split(SEP_CHAR_COMMANDS)[1].split(SEP_CHAR_PARAMETERS)[0]
-                    move = data.split(SEP_CHAR_COMMANDS)[1].split(SEP_CHAR_PARAMETERS)[1]
+                    move = data.split(SEP_CHAR_COMMANDS)[1].split(SEP_CHAR_PARAMETERS)[1].strip()
                 
                     print 'Pre move'
                     print '-Turn:', self.current_turn
@@ -196,14 +196,14 @@ class TicTacToeServer:
                 #*****************************************************************************
                 elif data.startswith(CMD_GET_MOVE):
                     # GET_MOVE id
-                    player_id = data.split(SEP_CHAR_COMMANDS)[1]  
+                    player_id = data.split(SEP_CHAR_COMMANDS)[1].strip()  
                     
                     print 'Pre get_move'
                     print '-Turn:', self.current_turn
                     print '-Player 1:', self.player1, self.player1_move
                     print '-Player 2:', self.player2, self.player2_move
                     
-                    if self.player1 != player_id:
+                    if str(self.player1).strip() != str(player_id).strip():
                         if self.player1_move == '':
                             print "Waiting for player 1 move"
                             clientsock.send(MSG_WAIT_FOR_MOVE + END_CHAR)
@@ -212,7 +212,7 @@ class TicTacToeServer:
                             clientsock.send(MSG_RIVAL_MOVE + SEP_CHAR_COMMANDS + self.player1 + SEP_CHAR_PARAMETERS + self.player1_move + END_CHAR)
                             self.player1_move = ''
                             
-                    elif self.player2 != player_id:
+                    elif str(self.player2).strip() != str(player_id).strip():
                         if self.player2_move == '':
                             print "Waiting for player 2 move"
                             clientsock.send(MSG_WAIT_FOR_MOVE + END_CHAR)
@@ -268,7 +268,7 @@ if __name__=='__main__':
 #sock.sendall("DO_MOVE 1 4 \n")
 #sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 #sock.connect((HOST, PORT))
-#sock.sendall("GET_MOVE 2 \n")
+#sock.sendall("GET_MOVE 2\r")
 #sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 #sock.connect((HOST, PORT))
 #sock.sendall("DO_MOVE 2 5 \n")
@@ -283,10 +283,16 @@ if __name__=='__main__':
 #HOST, PORT = "192.168.2.103", 9999
 #sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 #sock.connect((HOST, PORT))
-#sock.sendall("REGISTER 2000 \n")
-#sock.sendall("FIND_GAME 2 \n")
+#sock.sendall("REGISTER 2000 \r")
+#sock.sendall("FIND_GAME 2000 \r")
 
-#sock.sendall("GET_MOVE 2 \n")
 
-#sock.sendall("DO_MOVE 2,5 \n")
+
+#sock.sendall("DO_MOVE 2000,5\r")
+#sock.sendall("GET_MOVE 2000\r")
+#sock.sendall("DO_MOVE 2000,4\r")
+#sock.sendall("GET_MOVE 2000\r")
+#sock.sendall("DO_MOVE 2000,3\r")
+#sock.sendall("GET_MOVE 2000\r")
+
 
