@@ -464,6 +464,7 @@ void sendMove(int player_move){
   //If ack -> notReceived = false
   //If wait_for_rival -> delay 1000
   String res = sendAndWait(MSG_DO_MOVE + SEP_CHAR_COMMANDS + player_id + SEP_CHAR_PARAMETERS  + player_move +  END_CHAR);
+  Serial.println("Reply: '" + res + "'");
   String command = getCommand(res);
   while(notReceived){    
     if (command.startsWith(CMD_ACK)){
@@ -474,9 +475,14 @@ void sendMove(int player_move){
       Serial.println("Waiting for the rival to retrieve previous move...");
       delay(1000);
       res = sendAndWait(MSG_DO_MOVE + SEP_CHAR_COMMANDS + player_id + SEP_CHAR_PARAMETERS  + player_move +  END_CHAR);
+      Serial.println("Reply: '" + res + "'");
       command = getCommand(res);
     } else {
-      Serial.println("Unknown command");
+      Serial.println("Unknown command: '" + command + "'");
+      delay(1000);
+      res = sendAndWait(MSG_DO_MOVE + SEP_CHAR_COMMANDS + player_id + SEP_CHAR_PARAMETERS  + player_move +  END_CHAR);
+      Serial.println("Reply: '" + res + "'");
+      command = getCommand(res);
     } 
   }
 }
@@ -484,16 +490,22 @@ void sendMove(int player_move){
 void sendMsg(String msg){
   Serial1.print(msg);
 }
+
 String sendAndWait(String msg){ 
   Serial1.print(msg);
-  
+
   // Wait for the reply
   String res = "";
-  while (Serial1.available()){
+  while (true){
+    if (Serial1.available()){
       char data = Serial1.read();
       res += data;   
+      if (data == '\r'){
+        break;
+      }
     }
-  
+  }
+
   return res; 
 }
 
