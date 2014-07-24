@@ -287,7 +287,7 @@ void initializeBoard(){
   Serial.println("-Initializing board...");
   boolean waitToBoard = true;
   String msg = "";
-  Serial.println("--Waiting for board reply...")
+  Serial.println("--Waiting for board reply...");
   while (waitToBoard){
     delay(100);
     while (Serial1.available()){
@@ -540,7 +540,7 @@ void calibrateSensors(){
   // int maxGreen, int minGreen, int maxRed, int minRed
   squares[0]->calibrateCNY70(310, 270, 350, 320);
   squares[1]->calibrateCNY70(440, 415, 480, 460);
-  squares[2]->calibrateCNY70(240, 220, 335, 310);
+  squares[2]->calibrateCNY70(280, 220, 335, 310);
   squares[3]->calibrateCNY70(325, 250, 375, 340);
   squares[4]->calibrateCNY70(420, 380, 460, 435);
   squares[5]->calibrateCNY70(200, 140, 250, 205);
@@ -617,29 +617,25 @@ void updateColorStatus(){
 
 boolean isSame(int array1[], int array2[]){
   boolean same = true;
-  int size1 = sizeof(array1);
-  int size2 = sizeof(array2);
-  if (size1 == 9 && size2 == 9){
-    for (int i=0; i < 9; i++){
-      if (same==false){
-        break;
-      }
-      if (array1[i] == array2[i]){
-        same = true;
-      } 
-      else {
-        same = false;
-      }
+  
+  for (int i=0; i < 9; i++){
+    if (same==false){
+      break;
     }
-  } 
-  else {
-    same = false;
-  } 
+    if (array1[i] == array2[i]){
+      same = true;
+    } 
+    else {
+      same = false;
+    }
+  }
   return same;
 } 
 
 
 boolean checkWin(int statusArray[]){
+  printStatus("Green Status", greenStatus);
+  printStatus("Status array", statusArray);
   boolean win = false;
   for (int i=0; i < 8; i++){
     if (win){
@@ -651,6 +647,8 @@ boolean checkWin(int statusArray[]){
     for (int j=0; j < 9; j++){
       result[j] = statusArray[j] * winConditions[i][j];
     }  
+    printStatus("Result", result);
+    printStatus("WinStatus", winConditions[i]);
     win = isSame(result, winConditions[i]); 
   }
   return win;  
@@ -734,6 +732,14 @@ void restartGame(){
 
   // Find other player
   findPlayer();
+}
+
+void printStatus(String name, int statusArray[]){
+  Serial.print(name + ": ");
+  for (int i = 0; i < 9; i++){
+    Serial.print(String(statusArray[i]));
+  }
+  Serial.println();
 }
 
 
