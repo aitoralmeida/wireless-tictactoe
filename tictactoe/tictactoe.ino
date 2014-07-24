@@ -34,6 +34,7 @@ String MSG_FIND_GAME = "FIND_GAME"; // id
 String MSG_DO_MOVE =  "DO_MOVE"; // id movement(0..8)
 String MSG_GET_MOVE = "GET_MOVE"; // id
 String MSG_GAMEID = "GAMEID"; //id
+String MSG_OK = "OK";
 String END_CHAR = "\r"; 
 String SEP_CHAR_COMMANDS = " ";
 String SEP_CHAR_PARAMETERS = ",";
@@ -46,7 +47,7 @@ String CMD_WAIT_FOR_RIVAL = "WAIT_FOR_RIVAL";
 String CMD_WAIT_FOR_TURN = "WAIT_FOR_TURN";
 String CMD_RIVAL_MOVE = "RIVAL_MOVE"; // # rival_id move
 String CMD_ACK = "ACK"; // rival_id move
-String CMD_START_PLAYING = "GET_GAMEID";
+String CMD_START_PLAYING = "PLAY";
 String CMD_GET_GAMEID = "GET_GAMEID";
 
 
@@ -304,13 +305,13 @@ void initializeBoard(){
       Serial.println("--Received: " + msg);
       String command = getCommand(msg);
       Serial.println("Command: '" + command + "'");
-      if (command.startsWith(CMD_GET_GAMEID)){  //TODO pasar arriba string
+      if (command.startsWith(CMD_GET_GAMEID)){  
         String reply = MSG_GAMEID + SEP_CHAR_COMMANDS + String(GAME_ID) + END_CHAR;
         Serial.println("--Sending: '" + reply + "'");
         Serial1.print(reply);
       }
-      else if (command.startsWith()){
-        String reply = "OK" + END_CHAR;
+      else if (command.startsWith(CMD_START_PLAYING)){
+        String reply = MSG_OK + END_CHAR;
         Serial.println("--Sending: " + reply);
         Serial1.print(reply);
         waitToBoard = false;
