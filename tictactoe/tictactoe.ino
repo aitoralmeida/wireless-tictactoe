@@ -10,7 +10,7 @@
 #define GAME_ID 0x01 //tictactoe
 //Board ID
 #define BOARD_ID 0x01 //TODO: Change it for each board
-
+#define PLAYER__ID "1000"
 
 // Hardware addresses
 #define DISPLAY_ADDRESS  0x51
@@ -68,7 +68,7 @@ int latchpin = 23;
 Shiftduino _sd(datapin, clockpin, latchpin, numShifts);
 
 // Unique board ID (TODO: right now is set manually for testing purposes)
-String player_id = "1000";
+String player_id = PLAYER__ID;
 // Rival board id
 String rival_id = "0";
 // Who starts playing: 0 the player, 1 the rival.
