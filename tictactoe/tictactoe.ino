@@ -9,8 +9,8 @@
 //Game ID
 #define GAME_ID 0x01 //tictactoe
 //Board ID
-#define BOARD_ID 0x01 //TODO: Change it for each board
-#define PLAYER__ID "1000"
+#define BOARD_ID 0x08 //TODO: Change it for each board
+#define PLAYER__ID "8000"
 
 // Hardware addresses
 #define DISPLAY_ADDRESS  0x51
@@ -541,6 +541,18 @@ String sendAndWait(String msg){
 
 // The calibration changes from sensor to sensor
 // The values are unique for each board and sensor
+
+// New painted pieces
+void calibrateSensors(){
+  // int maxGreen, int minGreen, int maxRed, int minRed
+  for(int i = 0; i < 9; i++){
+    squares[i]->calibrateCNY70(450, 0, 830, 460);
+    delay(10);
+  }
+}
+
+/*
+// Old pieces with the colors that the 3D printer uses
 void calibrateSensors(){
   // int maxGreen, int minGreen, int maxRed, int minRed
   squares[0]->calibrateCNY70(310, 270, 350, 320);
@@ -553,6 +565,7 @@ void calibrateSensors(){
   squares[7]->calibrateCNY70(240, 190, 310, 250);
   squares[8]->calibrateCNY70(220, 170, 270, 245);  
 }
+*/
 
 
 /**********************************************
