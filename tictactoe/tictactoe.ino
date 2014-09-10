@@ -9,8 +9,8 @@
 //Game ID
 #define GAME_ID 0x01 //tictactoe
 //Board ID
-#define BOARD_ID 0x08 //TODO: Change it for each board
-#define PLAYER__ID "8000"
+#define BOARD_ID 0x07 //TODO: Change it for each board
+#define PLAYER__ID "7000"
 
 // Hardware addresses
 #define DISPLAY_ADDRESS  0x51
@@ -700,6 +700,7 @@ void victoryLoop(char color){
     } 
     delay(100);
 
+    /*
     printMsg("Press green button for another game");
     if (display.buttonsChanged()) {
       byte reply = display.getButtons();
@@ -711,6 +712,7 @@ void victoryLoop(char color){
         restartGame(); 
       }
     }
+    */
   }
 }
 
